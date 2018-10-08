@@ -1,6 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
+import {MaterialModule} from './material.module';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { AppComponent } from './app.component';
 import { ModeloFormularioComponent } from './modelo-formulario/modelo-formulario.component';
 import { RespostaModeloFormularioComponent } from './resposta-modelo-formulario/resposta-modelo-formulario.component';
@@ -11,7 +13,8 @@ import { SelectComponent } from './components/select/select.component';
 import { DateComponent } from './components/date/date.component';
 import { RadiobuttonComponent } from './components/radiobutton/radiobutton.component';
 import { CheckboxComponent } from './components/checkbox/checkbox.component';
-import { DynamicFieldComponent } from './components/dynamic-field/dynamic-field.component';
+import { DynamicFieldDirective } from './components/dynamic-field/dynamic-field.component';
+import { DynamicFormComponent } from './components/dynamic-form/dynamic-form.component';
 
 @NgModule({
   declarations: [
@@ -24,13 +27,25 @@ import { DynamicFieldComponent } from './components/dynamic-field/dynamic-field.
     DateComponent,
     RadiobuttonComponent,
     CheckboxComponent,
-    DynamicFieldComponent
+    DynamicFieldDirective,
+    DynamicFormComponent
   ],
   imports: [
     BrowserModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    MaterialModule,
+    ReactiveFormsModule,
+    FormsModule
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [
+    InputComponent,
+    ButtonComponent,
+    SelectComponent,
+    DateComponent,
+    RadiobuttonComponent,
+    CheckboxComponent
+  ]
 })
 export class AppModule { }

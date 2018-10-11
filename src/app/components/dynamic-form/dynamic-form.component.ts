@@ -1,23 +1,18 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnChanges,
-  OnInit,
-  Output
-} from "@angular/core";
-import {
-  FormGroup,
-  FormBuilder,
-  Validators,
-  FormControl
-} from "@angular/forms";
+import {  Component,  EventEmitter,  Input,  OnChanges,  OnInit,  Output} from "@angular/core";
+import {  FormGroup,  FormBuilder,  Validators,  FormControl} from "@angular/forms";
 import { FieldConfig } from "../../field-config";
+import {Validator} from "../../Validator"
 
 @Component({
-  selector: 'app-dynamic-form',
-  templateUrl: './dynamic-form.component.html',
-  styleUrls: ['./dynamic-form.component.css']
+  exportAs: "dynamicForm",
+  selector: "dynamic-form",
+  template: `
+  <form class="dynamic-form" [formGroup]="form" (submit)="onSubmit($event)">
+  <ng-container *ngFor="let field of fields;" dynamicField [field]="field" [group]="form">
+  </ng-container>
+  </form>
+  `,
+  styles: []
 })
 export class DynamicFormComponent implements OnInit {
   @Input() fields: FieldConfig[] = [];

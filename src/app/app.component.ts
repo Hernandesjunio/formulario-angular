@@ -1,7 +1,15 @@
+import { Subject } from 'rxjs';
+import { PerguntaCondicionalTexto } from './models/perguntas/condicional/pergunta-condicional';
 import { Component, ViewChild } from "@angular/core";
-import { Validators } from "@angular/forms";
+import { Validators, FormBuilder } from "@angular/forms";
 import { DynamicFormComponent } from "./components/dynamic-form/dynamic-form.component";
 import { FieldConfig } from "./field-config";
+import { TipoOperacaoCondicional } from './models/enumeradores/tipo-operacao-condicional.enum';
+import { TipoPergunta } from './models/enumeradores/tipo-pergunta.enum';
+import { RespostaModeloFormulario } from './models/resposta-modelo-formulario';
+import { PerguntaTexto } from './models/perguntas/pergunta-texto';
+import { ModeloFormulario } from './models/modelo-formulario';
+import { RespostaTexto } from './models/respostas/resposta-texto';
 
 @Component({
   selector: "app-root",
@@ -9,96 +17,179 @@ import { FieldConfig } from "./field-config";
   styleUrls: ["./app.component.css"]
 })
 export class AppComponent {
-  @ViewChild(DynamicFormComponent) form: DynamicFormComponent;
-  regConfig: FieldConfig[] = [
-    {
-      type: "input",
-      label: "Username",
-      inputType: "text",
-      name: "name",
-      validations: [
-        {
-          name: "required",
-          validator: Validators.required,
-          message: "Name Required"
-        },
-        {
-          name: "pattern",
-          validator: Validators.pattern("^[a-zA-Z]+$"),
-          message: "Accept only text"
-        }
-      ]
-    },
-    {
-      type: "input",
-      label: "Email Address",
-      inputType: "email",
-      name: "email",
-      validations: [
-        {
-          name: "required",
-          validator: Validators.required,
-          message: "Email Required"
-        },
-        {
-          name: "pattern",
-          validator: Validators.pattern(
-            "^[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$"
-          ),
-          message: "Invalid email"
-        }
-      ]
-    },
-    {
-      type: "input",
-      label: "Password",
-      inputType: "password",
-      name: "password",
-      validations: [
-        {
-          name: "required",
-          validator: Validators.required,
-          message: "Password Required"
-        }
-      ]
-    },
-    {
-      type: "radiobutton",
-      label: "Gender",
-      name: "gender",
-      options: ["Male", "Female"],
-      value: "Male"
-    },
-    {
-      type: "date",
-      label: "DOB",
-      name: "dob",
-      validations: [
-        {
-          name: "required",
-          validator: Validators.required,
-          message: "Date of Birth Required"
-        }
-      ]
-    },
-    {
-      type: "select",
-      label: "Country",
-      name: "country",
-      value: "UK",
-      options: ["India", "UAE", "UK", "US"]
-    },
-    {
-      type: "checkbox",
-      label: "Accept Terms",
-      name: "term",
-      value: true
-    },
-    {
-      type: "button",
-      label: "Save"
-    }
-  ];
+  
+  constructor(fb: FormBuilder) {
 
-  submit(value: any) {}
+    //this.respostaFormulario = new RespostaModeloFormulario();
+    this.respostaFormulario.modeloFormulario = new ModeloFormulario();
+
+    let pTexto = new PerguntaTexto();
+    pTexto.descricao = "Nome";
+    pTexto.titulo="nome";
+    pTexto.perguntaID = 1;
+    
+    let pTexto2 = new PerguntaTexto();
+    pTexto2.descricao = "Condicional";
+    pTexto2.titulo="Condicional";
+    pTexto2.perguntaID = 2;
+    let pCondicional2 = new PerguntaCondicionalTexto();
+    pCondicional2.perguntaID = 1;
+    pCondicional2.perguntaCondicionalID = 1;
+    pCondicional2.operacaoCondicional = TipoOperacaoCondicional.Texto_Igual;
+    pCondicional2.tipoPergunta = TipoPergunta.Texto;
+    pCondicional2.valorAtivacao = "Ativa";
+
+    pTexto2.perguntaCondicional = pCondicional2;
+
+    this.respostaFormulario.modeloFormulario.perguntas.push(pTexto);
+    this.respostaFormulario.modeloFormulario.perguntas.push(pTexto2);
+
+    var r1 = new RespostaTexto(this.respostaFormulario, 1, 1);
+    r1.valor = "Meu Valor";
+    this.respostaFormulario.respostas.push(r1);
+
+    var r2 = new RespostaTexto(this.respostaFormulario, 2, 2);
+    r2.valor = "Outro valor";
+
+    this.respostaFormulario.respostas.push(r2);
+
+    r1.getSubjectVisible().subscribe(x => {
+      console.log("R1 : ", x);
+    });
+
+    r2.getSubjectVisible().subscribe(x => {
+      console.log("R2 : ", x);
+    });
+
+    //return;
+    // r1.setValor("Inativa");    
+    // r2.setValor("Outro valor");
+
+     setTimeout(() => {
+        // r1.setValor("Ativa");  
+      // r2.setValor("Outro valor2");
+     }, 5000);
+
+    let control = fb.control({ value: 'teste' });
+    
+    return;
+
+    this.regConfig.push(
+      {
+        subjectVisible: r1.getSubjectVisible(),
+        valueChanges: (x) => {r1.setValor(x); console.log('r1'); },
+        visible: r1.getVisible(),
+        type: "input",
+        label: "Nome",
+        inputType: "text",
+        name: "Nome",
+        value: "",
+        validations: []
+      });
+
+    this.regConfig.push(
+      {
+        subjectVisible: r2.getSubjectVisible(),
+        valueChanges: (x) => {r2.setValor(x); console.log('r2'); },
+        visible: r2.getVisible(),
+        type: "input",
+        label: "Condicional",
+        inputType: "text",
+        name: "Condicional",
+        validations: []
+      });
+
+    // this.regConfig.push(
+    // {
+    //   type: "button",
+    //   label: "Save"
+    // });
+  }
+
+  @ViewChild(DynamicFormComponent) form: DynamicFormComponent;
+  regConfig: FieldConfig[] = [];
+  respostaFormulario: RespostaModeloFormulario = new RespostaModeloFormulario();
+
+  //   {
+  //     name: "required",
+  //     validator: Validators.required,
+  //     message: "Name Required"
+  //   },
+  //   {
+  //     name: "pattern",
+  //     validator: Validators.pattern("^[a-zA-Z]+$"),
+  //     message: "Accept only text"
+  //   }
+  //]
+  //},
+  // ,
+  // {
+  //   type: "input",
+  //   label: "Email Address",
+  //   inputType: "email",
+  //   name: "email",
+  //   validations: [
+  //     {
+  //       name: "required",
+  //       validator: Validators.required,
+  //       message: "Email Required"
+  //     },
+  //     {
+  //       name: "pattern",
+  //       validator: Validators.pattern(
+  //         "^[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$"
+  //       ),
+  //       message: "Invalid email"
+  //     }
+  //   ]
+  // },
+  // {
+  //   type: "input",
+  //   label: "Password",
+  //   inputType: "password",
+  //   name: "password",
+  //   validations: [
+  //     {
+  //       name: "required",
+  //       validator: Validators.required,
+  //       message: "Password Required"
+  //     }
+  //   ]
+  // },
+  // {
+  //   type: "radiobutton",
+  //   label: "Gender",
+  //   name: "gender",
+  //   options: ["Male", "Female"],
+  //   value: "Male"
+  // },
+  // {
+  //   type: "date",
+  //   label: "DOB",
+  //   name: "dob",
+  //   validations: [
+  //     {
+  //       name: "required",
+  //       validator: Validators.required,
+  //       message: "Date of Birth Required"
+  //     }
+  //   ]
+  // },
+  // {
+  //   type: "select",
+  //   label: "Country",
+  //   name: "country",
+  //   value: "UK",
+  //   options: ["India", "UAE", "UK", "US"]
+  // },
+  // {
+  //   type: "checkbox",
+  //   label: "Accept Terms",
+  //   name: "term",
+  //   value: true
+  // },
+
+  //];
+
+  submit(value: any) { }
 }

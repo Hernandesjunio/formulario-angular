@@ -1,3 +1,4 @@
+import { Pergunta } from 'src/app/models/perguntas/pergunta';
 import {  ComponentFactoryResolver,  ComponentRef,  Directive,  Input,  OnInit,  ViewContainerRef} from "@angular/core";
 import { FormGroup } from "@angular/forms";
 import { InputComponent } from "../input/input.component";
@@ -6,7 +7,7 @@ import { SelectComponent } from "../select/select.component";
 import { DateComponent } from "../date/date.component";
 import { RadiobuttonComponent } from "../radiobutton/radiobutton.component";
 import { CheckboxComponent } from "../checkbox/checkbox.component";
-import { FieldConfig } from "../../field-config";
+import { Resposta } from 'src/app/models/respostas/resposta';
 
 const componentMapper = {
   input: InputComponent,
@@ -20,7 +21,8 @@ const componentMapper = {
   selector: "[dynamicField]"
 })
 export class DynamicFieldDirective implements OnInit {
-  @Input() field: FieldConfig;
+  //@Input() field: FieldConfig;
+  @Input() resposta: Resposta;
   @Input() group: FormGroup;
   componentRef: any;
   constructor(
@@ -29,10 +31,10 @@ export class DynamicFieldDirective implements OnInit {
   ) {}
   ngOnInit() {
     const factory = this.resolver.resolveComponentFactory(
-      componentMapper[this.field.type]
+      componentMapper[this.resposta.pergunta.getTipoControle()]
     );
     this.componentRef = this.container.createComponent(factory);
-    this.componentRef.instance.field = this.field;
+    this.componentRef.instance.resposta = this.resposta;
     this.componentRef.instance.group = this.group;
   }
 }

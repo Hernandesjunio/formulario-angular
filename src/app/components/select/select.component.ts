@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FieldConfig } from '../../field-config';
 import { FormGroup } from '@angular/forms';
+import { Resposta } from 'src/app/models/respostas/resposta';
 
 @Component({
   selector: 'app-select',
@@ -9,7 +9,7 @@ import { FormGroup } from '@angular/forms';
 })
 export class SelectComponent implements OnInit {
 
-  field: FieldConfig;
+  resposta: Resposta;
   group: FormGroup;
 
   constructor() { }

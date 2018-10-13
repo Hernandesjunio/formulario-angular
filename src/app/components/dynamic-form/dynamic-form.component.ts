@@ -1,21 +1,20 @@
-import {  Component,  EventEmitter,  Input,  OnChanges,  OnInit,  Output} from "@angular/core";
-import {  FormGroup,  FormBuilder,  Validators,  FormControl} from "@angular/forms";
-import { FieldConfig } from "../../field-config";
-import {Validator} from "../../Validator"
+import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { FormGroup, FormBuilder, Validators } from "@angular/forms";
+import { RespostaModeloFormulario } from "src/app/models/resposta-modelo-formulario";
+import { TipoPergunta } from "src/app/models/enumeradores/tipo-pergunta.enum";
+import { RespostaTexto } from "src/app/models/respostas/resposta-texto";
 
 @Component({
   exportAs: "dynamicForm",
   selector: "dynamic-form",
-  template: `
-  <form class="dynamic-form" [formGroup]="form" (submit)="onSubmit($event)">
-  <ng-container *ngFor="let field of fields;" dynamicField [field]="field" [group]="form">
-  </ng-container>
-  </form>
-  `,
+  templateUrl: './dynamic-form.component.html',
   styles: []
 })
+
 export class DynamicFormComponent implements OnInit {
-  @Input() fields: FieldConfig[] = [];
+  @Input() respostaFormulario: RespostaModeloFormulario;
+
+  //@Input() fields: FieldConfig[] = [];
 
   @Output() submit: EventEmitter<any> = new EventEmitter<any>();
 
@@ -42,15 +41,36 @@ export class DynamicFormComponent implements OnInit {
 
   createControl() {
     const group = this.fb.group({});
-    this.fields.forEach(field => {
-      if (field.type === "button") return;
-      const control = this.fb.control(
-        field.value,
-        this.bindValidations(field.validations || [])
-      );
-      group.addControl(field.name, control);
-    });
-    return group;
+    console.log(this.respostaFormulario);
+    if (this.respostaFormulario != null) {
+      console.log('CreateControl2');
+      console.log(this.respostaFormulario);
+      this.respostaFormulario.respostas.forEach(resposta => {
+        let control = null;
+        //Habilita ou desabilita pergunta condicional
+        resposta.getSubjectVisible().subscribe((x: boolean) => {
+          if (x === true)
+            control.enable();
+          else
+            control.disable();
+        });
+        
+        if (resposta.pergunta.tipoPergunta === TipoPergunta.Texto) {
+          let rTexto = resposta as RespostaTexto;          
+          control = this.fb.control(rTexto.valor, 
+          this.bindValidations(resposta.getValidations() || []));
+          resposta.getSubjectVisible().next(resposta.getVisible());
+          control.valueChanges.subscribe( x=> rTexto.setValor(x));
+        }
+        else {
+          throw new Error("Não implementado");
+        }
+
+        group.addControl(`${resposta.pergunta.perguntaID}_${resposta.pergunta.titulo}`, control);
+      });
+    }
+
+    return group;   
   }
 
   bindValidations(validations: any) {

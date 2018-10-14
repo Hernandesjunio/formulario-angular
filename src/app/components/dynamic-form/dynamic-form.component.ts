@@ -1,8 +1,17 @@
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
+import 'rxjs/add/operator/debounceTime';
+import 'rxjs/add/operator/throttleTime';
+import 'rxjs/add/observable/fromEvent';
+
 import { RespostaModeloFormulario } from "src/app/models/resposta-modelo-formulario";
 import { TipoPergunta } from "src/app/models/enumeradores/tipo-pergunta.enum";
 import { RespostaTexto } from "src/app/models/respostas/resposta-texto";
+import { RespostaUnicaOpcao } from "src/app/models/respostas/resposta-unica-opcao";
+import { RespostaData } from "src/app/models/respostas/resposta-data";
+import { RespostaGradeOpcoes } from "src/app/models/respostas/resposta-grade-opcoes";
+import { RespostaNumero } from "src/app/models/respostas/resposta-numero";
+import { RespostaMultiplaOpcao } from "src/app/models/respostas/resposta-multipla-opcao";
 
 @Component({
   exportAs: "dynamicForm",
@@ -13,9 +22,6 @@ import { RespostaTexto } from "src/app/models/respostas/resposta-texto";
 
 export class DynamicFormComponent implements OnInit {
   @Input() respostaFormulario: RespostaModeloFormulario;
-
-  //@Input() fields: FieldConfig[] = [];
-
   @Output() submit: EventEmitter<any> = new EventEmitter<any>();
 
   form: FormGroup;
@@ -41,10 +47,8 @@ export class DynamicFormComponent implements OnInit {
 
   createControl() {
     const group = this.fb.group({});
-    console.log(this.respostaFormulario);
+
     if (this.respostaFormulario != null) {
-      console.log('CreateControl2');
-      console.log(this.respostaFormulario);
       this.respostaFormulario.respostas.forEach(resposta => {
         let control = null;
         //Habilita ou desabilita pergunta condicional
@@ -54,23 +58,52 @@ export class DynamicFormComponent implements OnInit {
           else
             control.disable();
         });
-        
+        resposta.getSubjectVisible().next(resposta.getVisible());
+
         if (resposta.pergunta.tipoPergunta === TipoPergunta.Texto) {
-          let rTexto = resposta as RespostaTexto;          
-          control = this.fb.control(rTexto.valor, 
-          this.bindValidations(resposta.getValidations() || []));
-          resposta.getSubjectVisible().next(resposta.getVisible());
-          control.valueChanges.subscribe( x=> rTexto.setValor(x));
-        }
-        else {
-          throw new Error("Não implementado");
-        }
+          let rTexto = resposta as RespostaTexto;
+          control = this.fb.control(rTexto.valor,
+            this.bindValidations(resposta.getValidations() || []));          
+          control.valueChanges.debounceTime(500).subscribe(x => { rTexto.setValor(x) });
+        } else
+          if (resposta.pergunta.tipoPergunta === TipoPergunta.Anexo) {
+            throw new Error("Não implementado");
+          } else
+            if (resposta.pergunta.tipoPergunta === TipoPergunta.EscolhaUnica) {
+              let rEscolhaUnica = resposta as RespostaUnicaOpcao;             
+              control = this.fb.control(rEscolhaUnica.opcaoID,
+                this.bindValidations(resposta.getValidations() || []));                
+              control.valueChanges.debounceTime(500).subscribe(x => { rEscolhaUnica.setOpcaoID(x) });
+            } else
+              if (resposta.pergunta.tipoPergunta === TipoPergunta.MultiplaEscolha) {
+                let rMultiplaEscolha = resposta as RespostaMultiplaOpcao;                
+                throw new Error("Não implementado");
+              } else
+                if (resposta.pergunta.tipoPergunta === TipoPergunta.Numero) {
+                  let rNumero = resposta as RespostaNumero;
+                  control = this.fb.control(rNumero.valor,
+                    this.bindValidations(resposta.getValidations() || []));
+                  control.valueChanges.debounceTime(500).subscribe(x => { rNumero.setValor(x) });
+                } else
+                  if (resposta.pergunta.tipoPergunta === TipoPergunta.Data) {
+                    let rData = resposta as RespostaData;
+                    control = this.fb.control(rData.valor,
+                      this.bindValidations(resposta.getValidations() || []));
+                    control.valueChanges.debounceTime(500).subscribe(x => { rData.setValor(x) });
+                  } else
+                    if (resposta.pergunta.tipoPergunta === TipoPergunta.Grade) {
+                      let rGrade = resposta as RespostaGradeOpcoes;
+                      throw new Error("Não implementado");
+                    }
+                    else {
+                      throw new Error("Não implementado");
+                    }
 
         group.addControl(`${resposta.pergunta.perguntaID}_${resposta.pergunta.titulo}`, control);
       });
     }
 
-    return group;   
+    return group;
   }
 
   bindValidations(validations: any) {

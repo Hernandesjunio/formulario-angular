@@ -1,4 +1,4 @@
 export class Opcao {
-    OpcaoID:number;
-    Descricao:string;
+    opcaoID:number;
+    descricao:string;
 }

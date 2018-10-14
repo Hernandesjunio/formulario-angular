@@ -2,6 +2,8 @@ import { Subject } from 'rxjs';
 import { RespostaModeloFormulario } from '../resposta-modelo-formulario';
 import { Pergunta } from '../perguntas/pergunta';
 import { Validator } from 'src/app/validator';
+import { PerguntaUnicaEscolha } from '../perguntas/pergunta-unica-escolha';
+import { PerguntaComOpcoes } from '../perguntas/pergunta-com-opcoes';
 
 export class Resposta{
     protected subject:Subject<any>;
@@ -65,7 +67,8 @@ export class Resposta{
         return `${this.perguntaID}_${this.pergunta.titulo}`;
     }
 
-    getComponentPlaceHolder():string{
+    getComponentPlaceHolder():string{     
+           
         return `${this.pergunta.descricao}`;
     }
 

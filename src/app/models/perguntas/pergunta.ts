@@ -11,7 +11,7 @@ export class Pergunta {
     obrigatorio: boolean;
     perguntaCondicional: PerguntaCondicional;
     perguntaCondicionalID: number;
-    leiautesPergunta: LeiautePergunta[];
+    leiautesPergunta: LeiautePergunta[] = [];
     tipoEntrada: number;
     validadorID: number;
 

@@ -10,6 +10,7 @@ import { RespostaModeloFormulario } from './models/resposta-modelo-formulario';
 import { PerguntaTexto } from './models/perguntas/pergunta-texto';
 import { ModeloFormulario } from './models/modelo-formulario';
 import { RespostaTexto } from './models/respostas/resposta-texto';
+import { LeiautePergunta } from './models/leiaute-pergunta';
 
 @Component({
   selector: "app-root",
@@ -27,6 +28,8 @@ export class AppComponent {
     pTexto.descricao = "Nome";
     pTexto.titulo="nome";
     pTexto.perguntaID = 1;
+
+    pTexto.leiautesPergunta.push(new LeiautePergunta());
     
     let pTexto2 = new PerguntaTexto();
     pTexto2.descricao = "Condicional";

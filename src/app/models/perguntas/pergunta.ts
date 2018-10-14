@@ -19,6 +19,9 @@ export class Pergunta {
         if (this.tipoPergunta == TipoPergunta.Texto)
             return "input";
 
+        if (this.tipoPergunta == TipoPergunta.MultiplaEscolha)
+            return "checkbox";
+
         throw new Error('Não implementado');
         //   button: ButtonComponent,
         //   select: SelectComponent,

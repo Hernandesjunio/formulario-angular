@@ -1,3 +1,4 @@
+import { PerguntaMultiplaEscolha } from './models/perguntas/pergunta-multipla-escolha';
 import { Subject } from 'rxjs';
 import { PerguntaCondicionalTexto } from './models/perguntas/condicional/pergunta-condicional';
 import { Component, ViewChild } from "@angular/core";
@@ -11,6 +12,8 @@ import { PerguntaTexto } from './models/perguntas/pergunta-texto';
 import { ModeloFormulario } from './models/modelo-formulario';
 import { RespostaTexto } from './models/respostas/resposta-texto';
 import { LeiautePergunta } from './models/leiaute-pergunta';
+import { Opcao } from './models/perguntas/opcao';
+import { RespostaMultiplaOpcao } from './models/respostas/resposta-multipla-opcao';
 
 @Component({
   selector: "app-root",
@@ -41,20 +44,39 @@ export class AppComponent {
     pCondicional2.operacaoCondicional = TipoOperacaoCondicional.Texto_Igual;
     pCondicional2.tipoPergunta = TipoPergunta.Texto;
     pCondicional2.valorAtivacao = "Ativa";
-
     pTexto2.perguntaCondicional = pCondicional2;
+
+    let pMultipla1 = new PerguntaMultiplaEscolha();
+    pMultipla1.perguntaID = 3;
+    pMultipla1.descricao="Multipla";
+    pMultipla1.titulo="Multipla";
+
+    let opcao1 = new Opcao();
+    opcao1.opcaoID=20;
+    opcao1.descricao="Op1";
+
+    let opcao2 = new Opcao();
+    opcao2.opcaoID=21;
+    opcao2.descricao="Op2";
+
+    pMultipla1.opcoes.push(opcao1);
+    pMultipla1.opcoes.push(opcao2);
 
     this.respostaFormulario.modeloFormulario.perguntas.push(pTexto);
     this.respostaFormulario.modeloFormulario.perguntas.push(pTexto2);
+    //this.respostaFormulario.modeloFormulario.perguntas.push(pMultipla1);
 
-    var r1 = new RespostaTexto(this.respostaFormulario, 1, 1);
+    let r1 = new RespostaTexto(this.respostaFormulario, 1, 1);
     r1.valor = "Meu Valor";
     this.respostaFormulario.respostas.push(r1);
 
-    var r2 = new RespostaTexto(this.respostaFormulario, 2, 2);
+    let r2 = new RespostaTexto(this.respostaFormulario, 2, 2);
     r2.valor = "Outro valor";
-
     this.respostaFormulario.respostas.push(r2);
+
+    // let r3 = new RespostaMultiplaOpcao(this.respostaFormulario,3,3);
+    // r3.opcoes.push(21);
+    // this.respostaFormulario.respostas.push(r3);
 
     r1.getSubjectVisible().subscribe(x => {
       console.log("R1 : ", x);

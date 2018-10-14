@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
-import { FormGroup, FormBuilder, Validators } from "@angular/forms";
+import { FormGroup, FormBuilder, Validators, FormControl, FormArray } from "@angular/forms";
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/throttleTime';
 import 'rxjs/add/observable/fromEvent';
@@ -12,6 +12,7 @@ import { RespostaData } from "src/app/models/respostas/resposta-data";
 import { RespostaGradeOpcoes } from "src/app/models/respostas/resposta-grade-opcoes";
 import { RespostaNumero } from "src/app/models/respostas/resposta-numero";
 import { RespostaMultiplaOpcao } from "src/app/models/respostas/resposta-multipla-opcao";
+import { PerguntaMultiplaEscolha } from "src/app/models/perguntas/pergunta-multipla-escolha";
 
 @Component({
   exportAs: "dynamicForm",
@@ -53,31 +54,45 @@ export class DynamicFormComponent implements OnInit {
         let control = null;
         //Habilita ou desabilita pergunta condicional
         resposta.getSubjectVisible().subscribe((x: boolean) => {
+          if(control as FormControl != null){          
           if (x === true)
             control.enable();
           else
             control.disable();
+          }
         });
         resposta.getSubjectVisible().next(resposta.getVisible());
 
         if (resposta.pergunta.tipoPergunta === TipoPergunta.Texto) {
           let rTexto = resposta as RespostaTexto;
           control = this.fb.control(rTexto.valor,
-            this.bindValidations(resposta.getValidations() || []));          
+            this.bindValidations(resposta.getValidations() || []));
           control.valueChanges.debounceTime(500).subscribe(x => { rTexto.setValor(x) });
         } else
           if (resposta.pergunta.tipoPergunta === TipoPergunta.Anexo) {
             throw new Error("Não implementado");
           } else
             if (resposta.pergunta.tipoPergunta === TipoPergunta.EscolhaUnica) {
-              let rEscolhaUnica = resposta as RespostaUnicaOpcao;             
+              let rEscolhaUnica = resposta as RespostaUnicaOpcao;
               control = this.fb.control(rEscolhaUnica.opcaoID,
-                this.bindValidations(resposta.getValidations() || []));                
+                this.bindValidations(resposta.getValidations() || []));
               control.valueChanges.debounceTime(500).subscribe(x => { rEscolhaUnica.setOpcaoID(x) });
             } else
               if (resposta.pergunta.tipoPergunta === TipoPergunta.MultiplaEscolha) {
-                let rMultiplaEscolha = resposta as RespostaMultiplaOpcao;                
-                throw new Error("Não implementado");
+                let rMultiplaEscolha = resposta as RespostaMultiplaOpcao;
+                let pMultipla = rMultiplaEscolha.pergunta as PerguntaMultiplaEscolha;
+
+                let controls = pMultipla.opcoes.map(x => this.fb.control(x.selected))
+                // controls[0].valueChanges.subscribe(x=>{
+                //   console.log(x);
+                // })
+                control = this.fb.array(controls,
+                  this.bindValidations(resposta.getValidations() || []));
+                // control.valueChanges.debounceTime(500).subscribe(x => {
+                //   console.log(x);
+                //   //rMultiplaEscolha.setOpcoes(x)
+                // });
+
               } else
                 if (resposta.pergunta.tipoPergunta === TipoPergunta.Numero) {
                   let rNumero = resposta as RespostaNumero;

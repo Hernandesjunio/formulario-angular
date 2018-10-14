@@ -1,7 +1,7 @@
 import { TipoOperacaoCondicional } from '../../enumeradores/tipo-operacao-condicional.enum';
 import { TipoPergunta } from '../../enumeradores/tipo-pergunta.enum';
-import { Opcao } from "../../../opcao";
 import { error } from '@angular/compiler/src/util';
+import { Opcao } from '../opcao';
 
 export class PerguntaCondicional{
     perguntaCondicionalID:number;

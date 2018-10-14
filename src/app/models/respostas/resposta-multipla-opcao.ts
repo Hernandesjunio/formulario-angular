@@ -6,7 +6,8 @@ export class RespostaMultiplaOpcao extends Resposta{
     opcoes:number[];
     
     constructor(respostaModeloFormulario:RespostaModeloFormulario, perguntaID:number, respostaID:number){
-        super(respostaModeloFormulario, perguntaID, respostaID);                                    
+        super(respostaModeloFormulario, perguntaID, respostaID);     
+        this.opcoes=[];                               
     }
 
     setOpcoes(op:number[]){

@@ -1,11 +1,11 @@
-import {  ComponentFactoryResolver,  ComponentRef,  Directive,  Input,  OnInit,  ViewContainerRef} from "@angular/core";
-import { FormGroup } from "@angular/forms";
-import { InputComponent } from "../input/input.component";
-import { ButtonComponent } from "../button/button.component";
-import { SelectComponent } from "../select/select.component";
-import { DateComponent } from "../date/date.component";
-import { RadiobuttonComponent } from "../radiobutton/radiobutton.component";
-import { CheckboxComponent } from "../checkbox/checkbox.component";
+import {  ComponentFactoryResolver,  ComponentRef,  Directive,  Input,  OnInit,  ViewContainerRef} from '@angular/core';
+import { FormGroup } from '@angular/forms';
+import { InputComponent } from '../input/input.component';
+import { ButtonComponent } from '../button/button.component';
+import { SelectComponent } from '../select/select.component';
+import { DateComponent } from '../date/date.component';
+import { RadiobuttonComponent } from '../radiobutton/radiobutton.component';
+import { CheckboxComponent } from '../checkbox/checkbox.component';
 import { Resposta } from 'src/app/models/respostas/resposta';
 
 const componentMapper = {
@@ -17,7 +17,8 @@ const componentMapper = {
   checkbox: CheckboxComponent
 };
 @Directive({
-  selector: "[dynamicField]"
+  // tslint:disable-next-line:directive-selector
+  selector: '[dynamicField]'
 })
 export class DynamicFieldDirective implements OnInit {
   @Input() resposta: Resposta;

@@ -1,4 +1,4 @@
-export class RespostaLinhaPerguntaGrade{
-    linhaPerguntaGradeID:number;
-    opcaoRespondidaID?:number;
+export class RespostaLinhaPerguntaGrade {
+    linhaPerguntaGradeID: number;
+    opcaoRespondidaID?: number;
 }

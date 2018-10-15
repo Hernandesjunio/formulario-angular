@@ -1,5 +1,5 @@
-import { Pergunta } from "./pergunta";
+import { Pergunta } from './pergunta';
 
-export class PerguntaData extends Pergunta{
-    
+export class PerguntaData extends Pergunta {
+
 }

@@ -1,7 +1,7 @@
-import { LeiautePerguntaItem } from "./leiaute-pergunta-item";
+import { LeiautePerguntaItem } from './leiaute-pergunta-item';
 
-export class LeiautePergunta{
-    leiautePerguntaID:number;
-    perguntaID:number;
-    leiautesPerguntaItem:LeiautePerguntaItem[];
+export class LeiautePergunta {
+    leiautePerguntaID: number;
+    perguntaID: number;
+    leiautesPerguntaItem: LeiautePerguntaItem[];
 }

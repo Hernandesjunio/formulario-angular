@@ -1,6 +1,6 @@
-import { NgModule } from "@angular/core";
-import { CommonModule } from "@angular/common";
-import { MatMomentDateModule } from "@angular/material-moment-adapter";
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import {
   MatButtonModule,
   MatIconModule,
@@ -14,7 +14,7 @@ import {
   MatOptionModule,
   MatCheckboxModule,
   MatRadioModule
-} from "@angular/material";
+} from '@angular/material';
 
 @NgModule({
   imports: [
@@ -48,4 +48,4 @@ import {
     MatRadioModule
   ]
 })
-export class MaterialModule {}
+export class MaterialModule { }

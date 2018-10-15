@@ -1,6 +1,6 @@
-import { Pergunta } from "./pergunta";
-import { Opcao } from "./opcao";
+import { Pergunta } from './pergunta';
+import { Opcao } from './opcao';
 
-export class PerguntaComOpcoes extends Pergunta{
-    opcoes:Opcao[];
+export class PerguntaComOpcoes extends Pergunta {
+    opcoes: Opcao[];
 }

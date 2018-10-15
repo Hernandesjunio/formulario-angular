@@ -1,5 +1,5 @@
 export interface Validator {
-    name:string;
-    validator:any;
-    message:string
+    name: string;
+    validator: any;
+    message: string;
 }

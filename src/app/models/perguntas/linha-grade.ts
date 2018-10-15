@@ -1,4 +1,4 @@
-export class LinhaGrade{
-    linhaID:number;
-    descricao:string;
+export class LinhaGrade {
+    linhaID: number;
+    descricao: string;
 }

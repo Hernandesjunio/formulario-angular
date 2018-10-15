@@ -1,20 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
-import { Resposta } from 'src/app/models/respostas/resposta';
+import { Component } from '@angular/core';
+import { BaseComponent } from '../base/base.component';
 
 @Component({
   selector: 'app-input',
   templateUrl: './input.component.html',
   styleUrls: ['./input.component.css']
 })
-export class InputComponent implements OnInit {
-
-resposta: Resposta;
-group:FormGroup;
-
-  constructor() { }
-
-  ngOnInit() {
-  }
+export class InputComponent extends BaseComponent {
 
 }

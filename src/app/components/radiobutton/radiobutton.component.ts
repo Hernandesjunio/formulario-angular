@@ -1,20 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
-import { Resposta } from 'src/app/models/respostas/resposta';
+import { Component } from '@angular/core';
+import { BaseComponent } from '../base/base.component';
 
 @Component({
   selector: 'app-radiobutton',
   templateUrl: './radiobutton.component.html',
   styleUrls: ['./radiobutton.component.css']
 })
-export class RadiobuttonComponent implements OnInit {
-
-  resposta: Resposta;
-  group: FormGroup;
-
-  constructor() { }
-
-  ngOnInit() {
-  }
+export class RadiobuttonComponent extends BaseComponent {
 
 }

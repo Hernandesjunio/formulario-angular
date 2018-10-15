@@ -1,12 +1,12 @@
-import { Pergunta } from "./perguntas/pergunta";
+import { Pergunta } from './perguntas/pergunta';
 
 
-export class ModeloFormulario{
-    titulo:string;
+export class ModeloFormulario {
+    titulo: string;
     perguntas: Pergunta[];
-    lstOperacaoCondicional:any[];
+    lstOperacaoCondicional: any[];
 
-    constructor(){
+    constructor() {
         this.perguntas = new Array<Pergunta>();
     }
 }

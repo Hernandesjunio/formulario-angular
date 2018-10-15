@@ -5,85 +5,84 @@ import { Validator } from 'src/app/validator';
 import { PerguntaUnicaEscolha } from '../perguntas/pergunta-unica-escolha';
 import { PerguntaComOpcoes } from '../perguntas/pergunta-com-opcoes';
 
-export class Resposta{
-    private subject:Subject<any>;
-    private subjectVisible:Subject<boolean>;
-    private respostaModeloFormulario:RespostaModeloFormulario;
-    private pergunta:Pergunta;    
-    respostaID:number;
-    perguntaID:number;
-    private visivel:boolean;
-    
-    constructor(respostaModeloFormulario:RespostaModeloFormulario, perguntaID:number, respostaID:number){
+export class Resposta {
+    private subject: Subject<any>;
+    private subjectVisible: Subject<boolean>;
+    private respostaModeloFormulario: RespostaModeloFormulario;
+    private pergunta: Pergunta;
+    respostaID: number;
+    perguntaID: number;
+    private visivel: boolean;
+
+    constructor(respostaModeloFormulario: RespostaModeloFormulario, perguntaID: number, respostaID: number) {
         this.perguntaID = perguntaID;
         this.respostaID = respostaID;
         this.respostaModeloFormulario = respostaModeloFormulario;
-        let pergunta = respostaModeloFormulario.modeloFormulario.perguntas.find(d=>d.perguntaID == this.perguntaID);
-        this.pergunta = pergunta;
+        this.pergunta = respostaModeloFormulario.modeloFormulario.perguntas.find(d => d.perguntaID === this.perguntaID);
         this.subjectVisible = new Subject<boolean>();
         this.createSubject();
         this.validarCondicional();
-    }    
+    }
 
-    validarCondicional():void{
-        if(this.pergunta.perguntaCondicional != null){
-            let perguntaCondicional = this.respostaModeloFormulario.modeloFormulario.perguntas.find(d=>d.perguntaID == this.pergunta.perguntaCondicional.perguntaID);
-            let respostaCondicional = this.respostaModeloFormulario.respostas.find(x=>x.perguntaID == perguntaCondicional.perguntaID);
+    validarCondicional(): void {
+        if (this.pergunta.perguntaCondicional != null) {
+            const p = this.respostaModeloFormulario.modeloFormulario.perguntas;
+            const perguntaCondicional = p.find(d => d.perguntaID === this.pergunta.perguntaCondicional.perguntaID);
+            const respostaCondicional = this.respostaModeloFormulario.respostas.find(x => x.perguntaID === perguntaCondicional.perguntaID);
 
-            if(respostaCondicional != null){
-                respostaCondicional.getSubject().subscribe(x=>{
-                    let v = this.pergunta.perguntaCondicional.VerificarAtivacaoCondicional(x);
+            if (respostaCondicional != null) {
+                respostaCondicional.getSubject().subscribe(x => {
+                    const v = this.pergunta.perguntaCondicional.VerificarAtivacaoCondicional(x);
                     this.setVisible(v);
-                });                      
+                });
             }
-        }  
-        else{
+        } else {
             this.setVisible(true);
         }
     }
 
-    getPergunta():Pergunta{
+    getPergunta(): Pergunta {
         return this.pergunta;
     }
 
-    getVisible():boolean{
+    getVisible(): boolean {
         return this.visivel;
     }
 
-    setVisible(b:boolean){
+    setVisible(b: boolean) {
         this.visivel = b;
         this.subjectVisible.next(this.visivel);
     }
 
-    protected createSubject(){
-        throw new Error("Create Subject doesn't implement");
+    protected createSubject() {
+        throw new Error('Create Subject doesnt implement');
     }
 
-    getSubjectVisible():Subject<boolean>{
+    getSubjectVisible(): Subject<boolean> {
         return this.subjectVisible;
     }
 
-    protected setSubject(sub:Subject<any>){
+    protected setSubject(sub: Subject<any>) {
         this.subject = sub;
     }
-    getSubject():Subject<any>{
+    getSubject(): Subject<any> {
         return this.subject;
     }
 
-    getComponentName():string{
+    getComponentName(): string {
         return `${this.perguntaID}_${this.pergunta.titulo}`;
     }
 
-    getComponentPlaceHolder():string{     
-           
+    getComponentPlaceHolder(): string {
+
         return `${this.pergunta.descricao}`;
     }
 
-    getComponentType():string{
+    getComponentType(): string {
         return this.pergunta.getTipoControle();
     }
 
-    getValidations():Validator[]{
+    getValidations(): Validator[] {
         return [];
     }
 }

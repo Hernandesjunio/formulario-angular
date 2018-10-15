@@ -5,5 +5,5 @@ export enum TipoPergunta {
     MultiplaEscolha = 4,
     Numero = 5,
     Data = 6,
-    Grade = 7,   
+    Grade = 7
 }

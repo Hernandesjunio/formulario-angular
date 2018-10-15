@@ -1,5 +1,5 @@
-import { PerguntaComOpcoes } from "./pergunta-com-opcoes";
+import { PerguntaComOpcoes } from './pergunta-com-opcoes';
 
-export class PerguntaUnicaEscolha extends PerguntaComOpcoes{
+export class PerguntaUnicaEscolha extends PerguntaComOpcoes {
 
 }

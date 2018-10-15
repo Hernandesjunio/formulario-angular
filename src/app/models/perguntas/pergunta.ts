@@ -1,6 +1,6 @@
-import { TipoPergunta } from "../enumeradores/tipo-pergunta.enum";
-import { PerguntaCondicional } from "./condicional/pergunta-condicional";
-import { LeiautePergunta } from "../leiaute-pergunta";
+import { TipoPergunta } from '../enumeradores/tipo-pergunta.enum';
+import { PerguntaCondicional } from './condicional/pergunta-condicional';
+import { LeiautePergunta } from '../leiaute-pergunta';
 
 export class Pergunta {
     deleted: boolean;
@@ -16,11 +16,13 @@ export class Pergunta {
     validadorID: number;
 
     getTipoControle(): any {
-        if (this.tipoPergunta == TipoPergunta.Texto)
-            return "input";
+        if (this.tipoPergunta === TipoPergunta.Texto) {
+            return 'input';
+        }
 
-        if (this.tipoPergunta == TipoPergunta.MultiplaEscolha)
-            return "checkbox";
+        if (this.tipoPergunta === TipoPergunta.MultiplaEscolha) {
+            return 'checkbox';
+        }
 
         throw new Error('Não implementado');
         //   button: ButtonComponent,

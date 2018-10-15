@@ -11,11 +11,11 @@ export class RespostaData extends Resposta{
 
     setValor(val:Date){
         this.valor = val;
-        this.subject.next(val);
+        this.getSubject().next(val);
     }
 
     protected createSubject(){
-        this.subject = new Subject<number>();  
+        this.setSubject(new Subject<number>());
     }
 }
 

@@ -1,4 +1,3 @@
-import { Pergunta } from 'src/app/models/perguntas/pergunta';
 import {  ComponentFactoryResolver,  ComponentRef,  Directive,  Input,  OnInit,  ViewContainerRef} from "@angular/core";
 import { FormGroup } from "@angular/forms";
 import { InputComponent } from "../input/input.component";
@@ -21,7 +20,6 @@ const componentMapper = {
   selector: "[dynamicField]"
 })
 export class DynamicFieldDirective implements OnInit {
-  //@Input() field: FieldConfig;
   @Input() resposta: Resposta;
   @Input() group: FormGroup;
   componentRef: any;
@@ -31,7 +29,7 @@ export class DynamicFieldDirective implements OnInit {
   ) {}
   ngOnInit() {
     const factory = this.resolver.resolveComponentFactory(
-      componentMapper[this.resposta.pergunta.getTipoControle()]
+      componentMapper[this.resposta.getPergunta().getTipoControle()]
     );
     this.componentRef = this.container.createComponent(factory);
     this.componentRef.instance.resposta = this.resposta;

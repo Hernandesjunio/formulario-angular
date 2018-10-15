@@ -11,10 +11,10 @@ export class RespostaNumero extends Resposta{
 
     setValor(val:number){
         this.valor = val;
-        this.subject.next(val);
+        this.getSubject().next(val);
     }
     protected createSubject(){
-        this.subject = new Subject<number>();  
+        this.setSubject(new Subject<number>());
     }
 }
 

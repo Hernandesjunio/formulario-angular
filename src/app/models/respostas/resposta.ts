@@ -6,13 +6,13 @@ import { PerguntaUnicaEscolha } from '../perguntas/pergunta-unica-escolha';
 import { PerguntaComOpcoes } from '../perguntas/pergunta-com-opcoes';
 
 export class Resposta{
-    protected subject:Subject<any>;
-    protected subjectVisible:Subject<boolean>;
-    protected respostaModeloFormulario:RespostaModeloFormulario;
-    pergunta:Pergunta;    
+    private subject:Subject<any>;
+    private subjectVisible:Subject<boolean>;
+    private respostaModeloFormulario:RespostaModeloFormulario;
+    private pergunta:Pergunta;    
     respostaID:number;
     perguntaID:number;
-    protected visivel:boolean;
+    private visivel:boolean;
     
     constructor(respostaModeloFormulario:RespostaModeloFormulario, perguntaID:number, respostaID:number){
         this.perguntaID = perguntaID;
@@ -42,6 +42,10 @@ export class Resposta{
         }
     }
 
+    getPergunta():Pergunta{
+        return this.pergunta;
+    }
+
     getVisible():boolean{
         return this.visivel;
     }
@@ -59,6 +63,9 @@ export class Resposta{
         return this.subjectVisible;
     }
 
+    protected setSubject(sub:Subject<any>){
+        this.subject = sub;
+    }
     getSubject():Subject<any>{
         return this.subject;
     }

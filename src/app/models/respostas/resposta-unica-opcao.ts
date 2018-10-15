@@ -11,10 +11,10 @@ export class RespostaUnicaOpcao extends Resposta{
 
     setOpcaoID(opcao?:number){
         this.opcaoID = opcao;
-        this.subject.next(opcao);   
+        this.getSubject().next(opcao);   
     }
 
     protected createSubject(){
-        this.subject = new Subject<number>();  
+        this.setSubject(new Subject<number>());
     }
 }

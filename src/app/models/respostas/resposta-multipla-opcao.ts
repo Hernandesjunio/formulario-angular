@@ -12,10 +12,10 @@ export class RespostaMultiplaOpcao extends Resposta{
 
     setOpcoes(op:number[]){
         this.opcoes = op;
-        this.subject.next(op);
+        this.getSubject().next(op);
     }
 
     protected createSubject(){
-        this.subject = new Subject<number[]>();  
+        this.setSubject(new Subject<number[]>());
     }
 }

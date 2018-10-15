@@ -10,12 +10,12 @@ export class RespostaTexto extends Resposta{
     }
 
     protected createSubject(){
-        this.subject = new Subject<string>();  
+        this.setSubject(new Subject<string>());
     }
 
     setValor(val:string):void{
         this.valor = val;
-        this.subject.next(val);        
+        this.getSubject().next(val);        
     }
 }
 

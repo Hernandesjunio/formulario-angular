@@ -1,3 +1,7 @@
 <div class="demo-full-width margin-top" [formGroup]="group">
-  <mat-checkbox *ngFor="let item of resposta.pergunta.opcoes" [formControlName]="resposta.getComponentName()">{{item.descricao}}</mat-checkbox>  
+  <div *ngFor="let item of group.get(resposta.getComponentName()).controls; let i = index">
+    <mat-checkbox [formControl]="item" 
+    (change)="resposta.setOpcoes(getOpcoesSelecionadas(group.get(resposta.getComponentName()),resposta.pergunta.opcoes,'opcaoID'))"
+      id="resposta.getComponentName()_{{i}}">{{resposta.pergunta.opcoes[i].descricao}}</mat-checkbox>
+  </div>  
 </div>

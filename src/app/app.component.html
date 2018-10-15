@@ -1,13 +1,9 @@
 <div class="form">
   <div style="text-align:center">
     <h1>
-      Registration Form
+      {{respostaFormulario.modeloFormulario.titulo}}
     </h1>
   </div>
   <dynamic-form [respostaFormulario]="respostaFormulario" (submit)="submit($event)">
-  </dynamic-form>
-  <div class="margin-top">
-  {{ form.value | json }}
-  </div>  
-  
+  </dynamic-form>    
 </div>

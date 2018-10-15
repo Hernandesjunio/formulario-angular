@@ -13,6 +13,7 @@ import { RespostaGradeOpcoes } from "src/app/models/respostas/resposta-grade-opc
 import { RespostaNumero } from "src/app/models/respostas/resposta-numero";
 import { RespostaMultiplaOpcao } from "src/app/models/respostas/resposta-multipla-opcao";
 import { PerguntaMultiplaEscolha } from "src/app/models/perguntas/pergunta-multipla-escolha";
+import { Opcao } from "src/app/models/perguntas/opcao";
 
 @Component({
   exportAs: "dynamicForm",
@@ -46,6 +47,8 @@ export class DynamicFormComponent implements OnInit {
     }
   }
 
+  
+
   createControl() {
     const group = this.fb.group({});
 
@@ -54,38 +57,41 @@ export class DynamicFormComponent implements OnInit {
         let control = null;
         //Habilita ou desabilita pergunta condicional
         resposta.getSubjectVisible().subscribe((x: boolean) => {
-          if(control as FormControl != null){          
-          if (x === true)
-            control.enable();
-          else
-            control.disable();
+          if (control as FormControl != null) {
+            if (x === true)
+              control.enable();
+            else
+              control.disable();
           }
         });
         resposta.getSubjectVisible().next(resposta.getVisible());
 
-        if (resposta.pergunta.tipoPergunta === TipoPergunta.Texto) {
+        if (resposta.getPergunta().tipoPergunta === TipoPergunta.Texto) {
           let rTexto = resposta as RespostaTexto;
           control = this.fb.control(rTexto.valor,
             this.bindValidations(resposta.getValidations() || []));
           control.valueChanges.debounceTime(500).subscribe(x => { rTexto.setValor(x) });
         } else
-          if (resposta.pergunta.tipoPergunta === TipoPergunta.Anexo) {
+          if (resposta.getPergunta().tipoPergunta === TipoPergunta.Anexo) {
             throw new Error("Não implementado");
           } else
-            if (resposta.pergunta.tipoPergunta === TipoPergunta.EscolhaUnica) {
+            if (resposta.getPergunta().tipoPergunta === TipoPergunta.EscolhaUnica) {
               let rEscolhaUnica = resposta as RespostaUnicaOpcao;
               control = this.fb.control(rEscolhaUnica.opcaoID,
                 this.bindValidations(resposta.getValidations() || []));
               control.valueChanges.debounceTime(500).subscribe(x => { rEscolhaUnica.setOpcaoID(x) });
             } else
-              if (resposta.pergunta.tipoPergunta === TipoPergunta.MultiplaEscolha) {
+              if (resposta.getPergunta().tipoPergunta === TipoPergunta.MultiplaEscolha) {
                 let rMultiplaEscolha = resposta as RespostaMultiplaOpcao;
-                let pMultipla = rMultiplaEscolha.pergunta as PerguntaMultiplaEscolha;
+                let pMultipla = rMultiplaEscolha.getPergunta() as PerguntaMultiplaEscolha;
+                
+                let controls = pMultipla.opcoes.map((x, i) => {
+                  let selected = false;
+                  if (rMultiplaEscolha.opcoes.findIndex(d => d == x.opcaoID) > -1)
+                    selected = true;
+                  return this.fb.control(selected);
+                });
 
-                let controls = pMultipla.opcoes.map(x => this.fb.control(x.selected))
-                // controls[0].valueChanges.subscribe(x=>{
-                //   console.log(x);
-                // })
                 control = this.fb.array(controls,
                   this.bindValidations(resposta.getValidations() || []));
                 // control.valueChanges.debounceTime(500).subscribe(x => {
@@ -94,19 +100,19 @@ export class DynamicFormComponent implements OnInit {
                 // });
 
               } else
-                if (resposta.pergunta.tipoPergunta === TipoPergunta.Numero) {
+                if (resposta.getPergunta().tipoPergunta === TipoPergunta.Numero) {
                   let rNumero = resposta as RespostaNumero;
                   control = this.fb.control(rNumero.valor,
                     this.bindValidations(resposta.getValidations() || []));
                   control.valueChanges.debounceTime(500).subscribe(x => { rNumero.setValor(x) });
                 } else
-                  if (resposta.pergunta.tipoPergunta === TipoPergunta.Data) {
+                  if (resposta.getPergunta().tipoPergunta === TipoPergunta.Data) {
                     let rData = resposta as RespostaData;
                     control = this.fb.control(rData.valor,
                       this.bindValidations(resposta.getValidations() || []));
                     control.valueChanges.debounceTime(500).subscribe(x => { rData.setValor(x) });
                   } else
-                    if (resposta.pergunta.tipoPergunta === TipoPergunta.Grade) {
+                    if (resposta.getPergunta().tipoPergunta === TipoPergunta.Grade) {
                       let rGrade = resposta as RespostaGradeOpcoes;
                       throw new Error("Não implementado");
                     }
@@ -114,7 +120,7 @@ export class DynamicFormComponent implements OnInit {
                       throw new Error("Não implementado");
                     }
 
-        group.addControl(`${resposta.pergunta.perguntaID}_${resposta.pergunta.titulo}`, control);
+        group.addControl(`${resposta.getPergunta().perguntaID}_${resposta.getPergunta().titulo}`, control);
       });
     }
 

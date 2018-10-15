@@ -24,8 +24,8 @@ export class AppComponent {
   
   constructor(fb: FormBuilder) {
 
-    //this.respostaFormulario = new RespostaModeloFormulario();
     this.respostaFormulario.modeloFormulario = new ModeloFormulario();
+    this.respostaFormulario.modeloFormulario.titulo = "Modelo de Formulário";
 
     let pTexto = new PerguntaTexto();
     pTexto.descricao = "Nome";
@@ -64,7 +64,7 @@ export class AppComponent {
 
     this.respostaFormulario.modeloFormulario.perguntas.push(pTexto);
     this.respostaFormulario.modeloFormulario.perguntas.push(pTexto2);
-    //this.respostaFormulario.modeloFormulario.perguntas.push(pMultipla1);
+    this.respostaFormulario.modeloFormulario.perguntas.push(pMultipla1);
 
     let r1 = new RespostaTexto(this.respostaFormulario, 1, 1);
     r1.valor = "Meu Valor";
@@ -74,9 +74,9 @@ export class AppComponent {
     r2.valor = "Outro valor";
     this.respostaFormulario.respostas.push(r2);
 
-    // let r3 = new RespostaMultiplaOpcao(this.respostaFormulario,3,3);
-    // r3.opcoes.push(21);
-    // this.respostaFormulario.respostas.push(r3);
+     let r3 = new RespostaMultiplaOpcao(this.respostaFormulario,3,3);
+     r3.opcoes.push(21);
+     this.respostaFormulario.respostas.push(r3);
 
     r1.getSubjectVisible().subscribe(x => {
       console.log("R1 : ", x);

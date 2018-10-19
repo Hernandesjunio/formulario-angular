@@ -1,3 +1,6 @@
+import { PerguntaUnicaEscolha } from './models/perguntas/pergunta-unica-escolha';
+import { RespostaGradeOpcoes } from './models/respostas/resposta-grade-opcoes';
+import { LinhaGrade } from './models/perguntas/linha-grade';
 import { PerguntaMultiplaEscolha } from './models/perguntas/pergunta-multipla-escolha';
 import { Subject } from 'rxjs';
 import { Component, ViewChild } from '@angular/core';
@@ -13,6 +16,9 @@ import { LeiautePergunta } from './models/leiaute-pergunta';
 import { Opcao } from './models/perguntas/opcao';
 import { RespostaMultiplaOpcao } from './models/respostas/resposta-multipla-opcao';
 import { PerguntaCondicionalTexto } from './models/perguntas/condicional/pergunta-condicional-texto';
+import { PerguntaGradeOpcoes } from './models/perguntas/pergunta-grade-opcoes';
+import { RespostaLinhaPerguntaGrade } from './models/respostas/resposta-linha-pergunta-grade';
+import { MatDialog } from '@angular/material';
 
 @Component({
   selector: 'app-root',
@@ -21,8 +27,8 @@ import { PerguntaCondicionalTexto } from './models/perguntas/condicional/pergunt
 })
 export class AppComponent {
 
-  constructor(fb: FormBuilder) {
-
+  constructor(fb: FormBuilder, public dialog: MatDialog) {
+    
     this.respostaFormulario.modeloFormulario = new ModeloFormulario();
     this.respostaFormulario.modeloFormulario.titulo = 'Modelo de Formulário';
 
@@ -37,6 +43,7 @@ export class AppComponent {
     pTexto2.descricao = 'Condicional';
     pTexto2.titulo = 'Condicional';
     pTexto2.perguntaID = 2;
+
     const pCondicional2 = new PerguntaCondicionalTexto();
     pCondicional2.perguntaID = 1;
     pCondicional2.perguntaCondicionalID = 1;
@@ -61,10 +68,43 @@ export class AppComponent {
     pMultipla1.opcoes.push(opcao1);
     pMultipla1.opcoes.push(opcao2);
 
+    const pGrade = new PerguntaGradeOpcoes();
+    pGrade.perguntaID=4;
+    pGrade.titulo="Conhecimentos";
+    pGrade.descricao="Conhecimentos";
+
+    const op1Grade = new Opcao();
+    op1Grade.opcaoID = 30;
+    op1Grade.descricao = 'Baixo';
+
+    const op2Grade = new Opcao();
+    op2Grade.opcaoID = 31;
+    op2Grade.descricao = 'Médio';
+
+    const op3Grade = new Opcao();
+    op3Grade.opcaoID = 32;
+    op3Grade.descricao = 'Avançado';
+
+    pGrade.opcoes.push(op1Grade);
+    pGrade.opcoes.push(op2Grade);
+    pGrade.opcoes.push(op3Grade);
+
+    const l1Grade = new LinhaGrade();
+    l1Grade.descricao="C#";
+    l1Grade.linhaID=1;
+
+    pGrade.linhasGrade.push(l1Grade);
+
+    const l2Grade = new LinhaGrade();
+    l2Grade.descricao="JAVA";
+    l2Grade.linhaID=2;
+
+    pGrade.linhasGrade.push(l2Grade);
+
     this.respostaFormulario.modeloFormulario.perguntas.push(pTexto);
     this.respostaFormulario.modeloFormulario.perguntas.push(pTexto2);
     this.respostaFormulario.modeloFormulario.perguntas.push(pMultipla1);
-
+    
     const r1 = new RespostaTexto(this.respostaFormulario, 1, 1);
     r1.valor = 'Meu Valor';
     this.respostaFormulario.respostas.push(r1);
@@ -76,6 +116,24 @@ export class AppComponent {
     const r3 = new RespostaMultiplaOpcao(this.respostaFormulario, 3, 3);
     r3.opcoes.push(21);
     this.respostaFormulario.respostas.push(r3);
+    
+    const rlpg = new Array<RespostaLinhaPerguntaGrade>();
+
+    const rlpg1 = new RespostaLinhaPerguntaGrade();
+    rlpg1.linhaPerguntaGradeID=1;
+
+    const rlpg2 = new RespostaLinhaPerguntaGrade();
+    rlpg2.linhaPerguntaGradeID=2;
+
+    rlpg.push(rlpg1);
+    rlpg.push(rlpg2);
+
+    this.respostaFormulario.modeloFormulario.perguntas.push(pGrade);
+    const r4 = new RespostaGradeOpcoes(this.respostaFormulario,4,4, rlpg);
+    r4.respostaLinhaPerguntaGrade[0].opcaoRespondidaID=30;
+    r4.respostaLinhaPerguntaGrade[1].opcaoRespondidaID=31
+
+    this.respostaFormulario.respostas.push(r4);
 
     r1.getSubjectVisible().subscribe(x => {
       console.log('R1 : ', x);

@@ -1,3 +1,25 @@
-<p>
-  multiple-line-radiobutton works!
-</p>
+<div class="container">
+  <div class="demo-full-width margin-top" [formGroup]="group">
+    <label class="radio-label-padding">{{resposta.getComponentPlaceHolder()}}:</label>
+    <br />
+    <mat-radio-group *ngFor="let control of group.get(resposta.getComponentName()).controls; let i = index"
+      [formControl]="control">
+      <div class="row">
+        <div class="col s2">{{resposta.pergunta.linhasGrade[i].descricao}} </div>
+        <div class="col s10">
+          <mat-radio-button *ngFor="let item of resposta.pergunta.opcoes" [value]="item.opcaoID">{{item.descricao}}</mat-radio-button>
+        </div>
+      </div>
+    </mat-radio-group>
+  </div>
+</div>
+<!--
+<div class="demo-full-width margin-top" [formGroup]="group">
+  <div *ngFor="let item of group.get(resposta.getComponentName()).controls; let i = index">
+    <mat-checkbox [formControl]="item" 
+    (change)="resposta.setOpcoes(getOpcoesSelecionadas(group.get(resposta.getComponentName()),resposta.pergunta.opcoes,'opcaoID'))"
+      id="resposta.getComponentName()_{{i}}">{{resposta.pergunta.opcoes[i].descricao}}</mat-checkbox>
+  </div>  
+</div>
+
+-->

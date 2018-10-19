@@ -14,6 +14,7 @@ import { RespostaNumero } from 'src/app/models/respostas/resposta-numero';
 import { RespostaMultiplaOpcao } from 'src/app/models/respostas/resposta-multipla-opcao';
 import { PerguntaMultiplaEscolha } from 'src/app/models/perguntas/pergunta-multipla-escolha';
 import { Opcao } from 'src/app/models/perguntas/opcao';
+import { PerguntaGradeOpcoes } from 'src/app/models/perguntas/pergunta-grade-opcoes';
 
 @Component({
   exportAs: 'dynamicForm',
@@ -116,12 +117,25 @@ export class DynamicFormComponent implements OnInit {
                   } else
                     if (resposta.getPergunta().tipoPergunta === TipoPergunta.Grade) {
                       const rGrade = resposta as RespostaGradeOpcoes;
-                      throw new Error('Não implementado');
+
+                      
+                      const controls = rGrade.respostaLinhaPerguntaGrade.map(linha => {
+                        //let a = this.fb.group({});
+
+                        const linhaControl = this.fb.control(linha.opcaoRespondidaID,
+                          this.bindValidations(resposta.getValidations() || []));
+                        linhaControl.valueChanges.debounceTime(500).subscribe(x => { console.log(x); rGrade.setRespostaGrade(linha); });
+                        return linhaControl;                        
+                      });
+                                            
+                      control = this.fb.array(controls);
+                      
+
                     } else {
                       throw new Error('Não implementado');
                     }
 
-        group.addControl(`${resposta.getPergunta().perguntaID}_${resposta.getPergunta().titulo}`, control);
+        group.addControl(resposta.getComponentName(), control);
       });
     }
 

@@ -4,11 +4,11 @@ import { Subject } from 'rxjs';
 import { RespostaLinhaPerguntaGrade } from './resposta-linha-pergunta-grade';
 
 export class RespostaGradeOpcoes extends Resposta {
-    respostaGrade: RespostaLinhaPerguntaGrade[];
+    respostaLinhaPerguntaGrade: RespostaLinhaPerguntaGrade[];
 
     constructor(rf: RespostaModeloFormulario, pID: number, rID: number, rg: RespostaLinhaPerguntaGrade[]) {
         super(rf, pID, rID);
-        this.respostaGrade = rg;
+        this.respostaLinhaPerguntaGrade = rg;
     }
 
     protected createSubject() {
@@ -16,7 +16,7 @@ export class RespostaGradeOpcoes extends Resposta {
     }
 
     setRespostaGrade(resposta: RespostaLinhaPerguntaGrade) {
-        const r = this.respostaGrade.find(x => x.linhaPerguntaGradeID === resposta.linhaPerguntaGradeID);
+        const r = this.respostaLinhaPerguntaGrade.find(x => x.linhaPerguntaGradeID === resposta.linhaPerguntaGradeID);
         r.opcaoRespondidaID = resposta.opcaoRespondidaID;
         this.getSubject().next(resposta);
     }

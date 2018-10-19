@@ -1,3 +1,4 @@
+import { MultipleLineRadiobuttonComponent } from './../multiple-line-radiobutton/multiple-line-radiobutton.component';
 import {  ComponentFactoryResolver,  ComponentRef,  Directive,  Input,  OnInit,  ViewContainerRef} from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { InputComponent } from '../input/input.component';
@@ -14,6 +15,7 @@ const componentMapper = {
   select: SelectComponent,
   date: DateComponent,
   radiobutton: RadiobuttonComponent,
+  multipleLineRadioButton:MultipleLineRadiobuttonComponent,
   checkbox: CheckboxComponent
 };
 @Directive({

@@ -1,3 +1,4 @@
+import { RadiobuttonComponent } from './../../components/radiobutton/radiobutton.component';
 import { TipoPergunta } from '../enumeradores/tipo-pergunta.enum';
 import { PerguntaCondicional } from './condicional/pergunta-condicional';
 import { LeiautePergunta } from '../leiaute-pergunta';
@@ -22,6 +23,14 @@ export class Pergunta {
 
         if (this.tipoPergunta === TipoPergunta.MultiplaEscolha) {
             return 'checkbox';
+        }
+
+        if (this.tipoPergunta === TipoPergunta.EscolhaUnica) {
+            return 'radiobutton';
+        }
+
+        if (this.tipoPergunta === TipoPergunta.Grade) {
+            return 'multipleLineRadioButton';
         }
 
         throw new Error('Não implementado');

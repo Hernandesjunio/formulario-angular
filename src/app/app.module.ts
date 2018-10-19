@@ -15,6 +15,7 @@ import { DynamicFieldDirective } from './components/dynamic-field/dynamic-field.
 import { DynamicFormComponent } from './components/dynamic-form/dynamic-form.component';
 import { BaseComponent } from './components/base/base.component';
 import { MultipleLineRadiobuttonComponent } from './components/multiple-line-radiobutton/multiple-line-radiobutton.component';
+import { FileUploadComponent } from './components/file-upload/file-upload.component';
 
 @NgModule({
   declarations: [
@@ -25,10 +26,12 @@ import { MultipleLineRadiobuttonComponent } from './components/multiple-line-rad
     SelectComponent,
     DateComponent,
     RadiobuttonComponent,
+    MultipleLineRadiobuttonComponent,
     CheckboxComponent,
     DynamicFieldDirective,
     DynamicFormComponent,
-    MultipleLineRadiobuttonComponent
+    MultipleLineRadiobuttonComponent,
+    FileUploadComponent
   ],
   imports: [
     BrowserModule,
@@ -42,6 +45,7 @@ import { MultipleLineRadiobuttonComponent } from './components/multiple-line-rad
   entryComponents: [
     BaseComponent,
     InputComponent,
+    MultipleLineRadiobuttonComponent,
     ButtonComponent,
     SelectComponent,
     DateComponent,

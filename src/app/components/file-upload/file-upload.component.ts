@@ -1,6 +1,8 @@
+import { ResponseContentType } from '@angular/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { BaseComponent } from '../base/base.component';
 import { Subject, Observable, forkJoin } from 'rxjs';
+import { HttpClient, HttpRequest, HttpEventType, HttpResponse, HttpHeaders } from '@angular/common/http';
 
 @Component({
   selector: 'app-file-upload',
@@ -21,7 +23,7 @@ export class FileUploadComponent extends BaseComponent {
   /**
    *
    */
-  constructor() {
+  constructor(private http: HttpClient) {
     super();
 
   }
@@ -92,15 +94,39 @@ export class FileUploadComponent extends BaseComponent {
     // this will be the our resulting map
     const status = {};
 
+    const url = "http://localhost:61005/api/upload";
+
     files.forEach(file => {
       // create a new multipart-form for every file
       const formData: FormData = new FormData();
       formData.append('file', file, file.name);
+      const headers = new HttpHeaders({
+        //'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        //'Access-Control-Allow-Credentials': 'true',
+        'Access-Control-Allow-Methods': 'GET,HEAD,OPTIONS,POST,PUT'
+      });
+
+      const httpOptions = {
+        headers: headers,
+        reportProgress: true
+      }
+
+      const reqGet = new HttpRequest('GET', 'http://localhost:61005/api/upload', {
+        responseType: 'json'
+      })
+
+      this.http.get('http://localhost:61005/api/upload').subscribe(x=>{
+          console.log(x);
+      });
 
       // create a http-post request and pass the form
       // tell it to report the upload progress
-      // const req = new HttpRequest('POST', url, formData, {
-      //   reportProgress: true
+      const req = new HttpRequest('POST', url, formData, httpOptions);
+
+      // this.http.post("http://localhost:61005/api/upload",formData, httpOptions)
+      // .subscribe(c=> {
+      //   console.log(c);
       // });
 
       // create a new progress-subject for every file
@@ -108,31 +134,33 @@ export class FileUploadComponent extends BaseComponent {
 
       let count = 0;
 
-      const interval = setInterval(x => {
-        count++;
-        progress.next(count);
+      // const interval = setInterval(x => {
+      //   count++;
+      //   progress.next(count);
 
-        if (count == 100) {
-          clearInterval(interval);
-          progress.complete();
-        }
-      }, 100)
-      // send the http-request and subscribe for progress-updates
-      // this.http.request(req).subscribe(event => {
-      //   if (event.type === HttpEventType.UploadProgress) {
-
-      //     // calculate the progress percentage
-      //     const percentDone = Math.round(100 * event.loaded / event.total);
-
-      //     // pass the percentage into the progress-stream
-      //     progress.next(percentDone);
-      //   } else if (event instanceof HttpResponse) {
-
-      //     // Close the progress-stream if we get an answer form the API
-      //     // The upload is complete
+      //   if (count == 100) {
+      //     clearInterval(interval);
       //     progress.complete();
       //   }
-      // });
+      // }, 100);
+
+      // send the http-request and subscribe for progress-updates
+      this.http.request(req).subscribe(event => {
+        if (event.type === HttpEventType.UploadProgress) {
+          if (event.total > 0) {
+            // calculate the progress percentage
+            const percentDone = Math.round(100 * event.loaded / event.total);
+
+            // pass the percentage into the progress-stream
+            progress.next(percentDone);
+          } 
+        } else if (event instanceof HttpResponse) {
+
+          // Close the progress-stream if we get an answer form the API
+          // The upload is complete
+          progress.complete();
+        }
+      });
 
       // Save every progress-observable in a map of all observables
       status[file.name] = {

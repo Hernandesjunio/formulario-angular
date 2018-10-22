@@ -16,11 +16,14 @@ import { DynamicFormComponent } from './components/dynamic-form/dynamic-form.com
 import { BaseComponent } from './components/base/base.component';
 import { MultipleLineRadiobuttonComponent } from './components/multiple-line-radiobutton/multiple-line-radiobutton.component';
 import { FileUploadComponent } from './components/file-upload/file-upload.component';
+import { CommonModule } from '@angular/common';
+import { MatProgressBarModule, MatDialogModule } from '@angular/material';
 
 @NgModule({
   declarations: [
     AppComponent,
     BaseComponent,
+    FileUploadComponent,
     InputComponent,
     ButtonComponent,
     SelectComponent,
@@ -34,8 +37,11 @@ import { FileUploadComponent } from './components/file-upload/file-upload.compon
     FileUploadComponent
   ],
   imports: [
+    CommonModule, 
+    //MatProgressBarModule,
+    //MatDialogModule,
     BrowserModule,
-    BrowserAnimationsModule,
+    //BrowserAnimationsModule,
     MaterialModule,
     ReactiveFormsModule,
     FormsModule
@@ -44,6 +50,7 @@ import { FileUploadComponent } from './components/file-upload/file-upload.compon
   bootstrap: [AppComponent],
   entryComponents: [
     BaseComponent,
+    FileUploadComponent,
     InputComponent,
     MultipleLineRadiobuttonComponent,
     ButtonComponent,

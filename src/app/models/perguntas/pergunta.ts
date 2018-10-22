@@ -33,6 +33,10 @@ export class Pergunta {
             return 'multipleLineRadioButton';
         }
 
+        if (this.tipoPergunta === TipoPergunta.Anexo) {
+            return 'file';
+        }
+
         throw new Error('Não implementado');
         //   button: ButtonComponent,
         //   select: SelectComponent,

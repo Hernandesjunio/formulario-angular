@@ -19,6 +19,8 @@ import { PerguntaCondicionalTexto } from './models/perguntas/condicional/pergunt
 import { PerguntaGradeOpcoes } from './models/perguntas/pergunta-grade-opcoes';
 import { RespostaLinhaPerguntaGrade } from './models/respostas/resposta-linha-pergunta-grade';
 import { MatDialog } from '@angular/material';
+import { PerguntaAnexo } from './models/perguntas/pergunta-anexo';
+import { RespostaAnexo } from './models/respostas/resposta-anexo';
 
 @Component({
   selector: 'app-root',
@@ -101,9 +103,17 @@ export class AppComponent {
 
     pGrade.linhasGrade.push(l2Grade);
 
+    const pAnexo = new PerguntaAnexo();
+    pAnexo.descricao="Anexo";
+    pAnexo.titulo="Anexo";
+    pAnexo.perguntaID=5;
+    pAnexo.tipoPergunta = TipoPergunta.Anexo;
+        
+
     this.respostaFormulario.modeloFormulario.perguntas.push(pTexto);
     this.respostaFormulario.modeloFormulario.perguntas.push(pTexto2);
     this.respostaFormulario.modeloFormulario.perguntas.push(pMultipla1);
+    this.respostaFormulario.modeloFormulario.perguntas.push(pAnexo);
     
     const r1 = new RespostaTexto(this.respostaFormulario, 1, 1);
     r1.valor = 'Meu Valor';
@@ -135,13 +145,17 @@ export class AppComponent {
 
     this.respostaFormulario.respostas.push(r4);
 
-    r1.getSubjectVisible().subscribe(x => {
-      console.log('R1 : ', x);
-    });
+    const rAnexo = new RespostaAnexo(this.respostaFormulario,5,5);
+    rAnexo.anexoID=0;
+    this.respostaFormulario.respostas.push(rAnexo);
 
-    r2.getSubjectVisible().subscribe(x => {
-      console.log('R2 : ', x);
-    });
+    // r1.getSubjectVisible().subscribe(x => {
+    //   console.log('R1 : ', x);
+    // });
+
+    // r2.getSubjectVisible().subscribe(x => {
+    //   console.log('R2 : ', x);
+    // });
   }
 
   @ViewChild(DynamicFormComponent) form: DynamicFormComponent;

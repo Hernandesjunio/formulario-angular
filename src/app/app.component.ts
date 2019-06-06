@@ -38,6 +38,7 @@ export class AppComponent {
     pTexto.descricao = 'Nome';
     pTexto.titulo = 'nome';
     pTexto.perguntaID = 1;
+    pTexto.obrigatorio = true;
 
     pTexto.leiautesPergunta.push(new LeiautePergunta());
 
@@ -45,6 +46,7 @@ export class AppComponent {
     pTexto2.descricao = 'Condicional';
     pTexto2.titulo = 'Condicional';
     pTexto2.perguntaID = 2;
+    pTexto2.obrigatorio = true;
 
     const pCondicional2 = new PerguntaCondicionalTexto();
     pCondicional2.perguntaID = 1;
@@ -58,6 +60,7 @@ export class AppComponent {
     pMultipla1.perguntaID = 3;
     pMultipla1.descricao = 'Multipla';
     pMultipla1.titulo = 'Multipla';
+    pMultipla1.obrigatorio = true;
 
     const opcao1 = new Opcao();
     opcao1.opcaoID = 20;
@@ -107,7 +110,8 @@ export class AppComponent {
     pAnexo.descricao="Anexo";
     pAnexo.titulo="Anexo";
     pAnexo.perguntaID=5;
-    pAnexo.tipoPergunta = TipoPergunta.Anexo;
+    //pAnexo.tipoPergunta = TipoPergunta.Anexo;
+    //pAnexo.tamanhoMaximoBytes = 1024;
         
 
     this.respostaFormulario.modeloFormulario.perguntas.push(pTexto);

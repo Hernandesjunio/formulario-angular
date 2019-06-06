@@ -4,6 +4,7 @@ import { Pergunta } from '../perguntas/pergunta';
 import { Validator } from 'src/app/validator';
 import { PerguntaUnicaEscolha } from '../perguntas/pergunta-unica-escolha';
 import { PerguntaComOpcoes } from '../perguntas/pergunta-com-opcoes';
+import { Validators, ValidationErrors } from '@angular/forms';
 
 export class Resposta {
     private subject: Subject<any>;
@@ -83,6 +84,13 @@ export class Resposta {
     }
 
     getValidations(): Validator[] {
-        return [];
+
+        const validations: Validator[] = [];
+
+        if (this.pergunta.obrigatorio === true) {
+            validations.push({ name: this.getComponentName(), message: 'Campo obrigatório', validator: Validators.required });
+        }
+
+        return validations;
     }
 }

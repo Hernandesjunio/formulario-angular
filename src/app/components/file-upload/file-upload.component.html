@@ -1,19 +1,25 @@
 <!-- <div [formGroup]="group"><input [formControl]="group.get(resposta.getComponentName())" #fileInput [placeholder]="resposta.getComponentPlaceHolder()"
     [type]="resposta.getComponentType()"></div> -->
 <!-- <mat-form-field class="demo-full-width" [formGroup]="group" [ngStyle]="{display:(resposta.getVisible()?'block':'none')}"> -->
-  
-  <!-- <ng-container *ngFor="let validation of resposta.getValidations();" ngProjectAs="mat-error">
+
+<!-- <ng-container *ngFor="let validation of resposta.getValidations();" ngProjectAs="mat-error">
     <mat-error *ngIf="group.get(resposta.getComponentName()).hasError(validation.name)">{{validation.message}}</mat-error>
   </ng-container> -->
 <!-- </mat-form-field> -->
 
-<input type="file" #file style="display: none" (change)="onFilesAdded()" multiple/>
-<div class="container" fxLayout="column" fxLayoutAlign="space-evenly stretch">
+
+<div [formGroup]="group" [ngStyle]="{display:(resposta.getVisible()?'block':'none')}" class="container" fxLayout="column"
+  fxLayoutAlign="space-evenly stretch">
+  <input type="file" [formControlName]="resposta.getComponentName()" #file style="display: none" />
   <h1 mat-dialog-title>Subir arquivo</h1>
   <div>
     <button [disabled]="uploading" mat-raised-button color="primary" class="add-files-btn" (click)="addFiles()">
       Adicionar Arquivo
     </button>
+    <br />
+    <span>Tamanho máximo:&nbsp;{{resposta.getPergunta().tamanhoMaximoBytes/1024/1024}}&nbsp;MB</span>
+    <br />
+    <span>Tamanho do arquivo:&nbsp;{{resposta.getValor().size/1014/1014}}&nbsp;MB</span>
   </div>
 
   <!-- This is the content of the dialog, containing a list of the files to upload -->
@@ -25,7 +31,10 @@
       </mat-list-item>
     </mat-list>
   </mat-dialog-content>
-
+  <ng-container *ngFor="let validation of resposta.getValidations();" ngProjectAs="mat-error">
+    <mat-error *ngIf="group.get(resposta.getComponentName()).hasError(validation.name)">{{validation.message}}</mat-error>    
+  </ng-container>
+  
   <!-- This are the actions of the dialog, containing the primary and the cancel button-->
   <!-- <mat-dialog-actions class="actions">
     <button *ngIf="showCancelButton" mat-button mat-dialog-close>Cancel</button>

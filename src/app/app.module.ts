@@ -18,6 +18,7 @@ import { MultipleLineRadiobuttonComponent } from './components/multiple-line-rad
 import { FileUploadComponent } from './components/file-upload/file-upload.component';
 import { CommonModule } from '@angular/common';
 import { MatProgressBarModule, MatDialogModule } from '@angular/material';
+import { FormControlCreator } from './components/dynamic-form/form-control-creator';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { MatProgressBarModule, MatDialogModule } from '@angular/material';
     CheckboxComponent,
     DynamicFieldDirective,
     DynamicFormComponent,
+    //FormControlCreator,
     MultipleLineRadiobuttonComponent,
     FileUploadComponent
   ],

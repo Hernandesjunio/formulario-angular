@@ -1,7 +1,7 @@
 import { ResponseContentType } from '@angular/http';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ViewChild, OnDestroy } from '@angular/core';
 import { BaseComponent } from '../base/base.component';
-import { Subject, Observable, forkJoin } from 'rxjs';
+import { Subject, Observable, forkJoin, Subscription } from 'rxjs';
 import { HttpClient, HttpRequest, HttpEventType, HttpResponse, HttpHeaders } from '@angular/common/http';
 
 @Component({
@@ -9,9 +9,9 @@ import { HttpClient, HttpRequest, HttpEventType, HttpResponse, HttpHeaders } fro
   templateUrl: './file-upload.component.html',
   styleUrls: ['./file-upload.component.css']
 })
-export class FileUploadComponent extends BaseComponent {
+export class FileUploadComponent extends BaseComponent implements OnDestroy {
   @ViewChild("file") file;
-
+  subscription: Subscription[] = [];
   progress: { [key: string]: { progress: Observable<number> } };
   canBeClosed: boolean = true;
   primaryButtonText: string = 'Upload';
@@ -28,13 +28,17 @@ export class FileUploadComponent extends BaseComponent {
 
   }
 
-  addFiles() {
+  ngOnDestroy(): void {
+    this.subscription.forEach(x => x.unsubscribe());
+  }
+
+  addFiles(): void {
     this.file.nativeElement.click();
   }
 
   uploadFiles() {
-    if (this.uploadSuccessful)
-      return;
+    // if (this.uploadSuccessful)
+    //   return;
 
     this.uploading = true;
 
@@ -47,7 +51,7 @@ export class FileUploadComponent extends BaseComponent {
 
     this.primaryButtonText = "Finalizar";
 
-    forkJoin(allProgressObservables).subscribe(end => {
+    var sub = forkJoin(allProgressObservables).subscribe(end => {
       // ... the dialog can be closed again...
       this.canBeClosed = true;
       //this.dialogRef.disableClose = false;
@@ -58,6 +62,8 @@ export class FileUploadComponent extends BaseComponent {
       // ... and the component is no longer uploading
       this.uploading = false;
     });
+
+    this.subscription.push(sub);
   }
 
   // downloadFile(id: number) {
@@ -112,13 +118,13 @@ export class FileUploadComponent extends BaseComponent {
         reportProgress: true
       }
 
-      const reqGet = new HttpRequest('GET', 'http://localhost:61005/api/upload', {
-        responseType: 'json'
-      })
+      // const reqGet = new HttpRequest('GET', 'http://localhost:61005/api/upload', {
+      //   responseType: 'json'
+      // })
 
-      this.http.get('http://localhost:61005/api/upload').subscribe(x=>{
-          console.log(x);
-      });
+      // this.http.get('http://localhost:61005/api/upload').subscribe(x=>{
+      //     console.log(x);
+      // });
 
       // create a http-post request and pass the form
       // tell it to report the upload progress
@@ -134,33 +140,33 @@ export class FileUploadComponent extends BaseComponent {
 
       let count = 0;
 
-      // const interval = setInterval(x => {
-      //   count++;
-      //   progress.next(count);
+      const interval = setInterval(x => {
+        count++;
+        progress.next(count);
 
-      //   if (count == 100) {
-      //     clearInterval(interval);
-      //     progress.complete();
-      //   }
-      // }, 100);
-
-      // send the http-request and subscribe for progress-updates
-      this.http.request(req).subscribe(event => {
-        if (event.type === HttpEventType.UploadProgress) {
-          if (event.total > 0) {
-            // calculate the progress percentage
-            const percentDone = Math.round(100 * event.loaded / event.total);
-
-            // pass the percentage into the progress-stream
-            progress.next(percentDone);
-          } 
-        } else if (event instanceof HttpResponse) {
-
-          // Close the progress-stream if we get an answer form the API
-          // The upload is complete
+        if (count == 100) {
+          clearInterval(interval);
           progress.complete();
         }
-      });
+      }, 10);
+
+      // send the http-request and subscribe for progress-updates
+      // this.http.request(req).subscribe(event => {
+      //   if (event.type === HttpEventType.UploadProgress) {
+      //     if (event.total > 0) {
+      //       // calculate the progress percentage
+      //       const percentDone = Math.round(100 * event.loaded / event.total);
+
+      //       // pass the percentage into the progress-stream
+      //       progress.next(percentDone);
+      //     } 
+      //   } else if (event instanceof HttpResponse) {
+
+      //     // Close the progress-stream if we get an answer form the API
+      //     // The upload is complete
+      //     progress.complete();
+      //   }
+      // });
 
       // Save every progress-observable in a map of all observables
       status[file.name] = {
@@ -173,6 +179,7 @@ export class FileUploadComponent extends BaseComponent {
   }
 
   onFilesAdded() {
+    this.files.clear();
     const files: { [key: string]: File } = this.file.nativeElement.files;
     for (let key in files) {
       if (!isNaN(parseInt(key))) {

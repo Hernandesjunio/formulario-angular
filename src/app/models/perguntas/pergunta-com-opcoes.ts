@@ -6,8 +6,7 @@ export class PerguntaComOpcoes extends Pergunta {
      *
      */
     constructor() {
-        super();
-        this.opcoes=[];
+        super();        
     }
-    opcoes: Opcao[];
+    opcoes: Opcao[]=[];
 }

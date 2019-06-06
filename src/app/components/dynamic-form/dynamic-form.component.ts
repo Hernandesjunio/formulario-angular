@@ -1,6 +1,7 @@
+import { PerguntaAnexo } from './../../models/perguntas/pergunta-anexo';
 import { FileUploadComponent } from './../file-upload/file-upload.component';
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormControl, FormArray } from '@angular/forms';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild, OnDestroy } from '@angular/core';
+import { FormGroup, FormBuilder, Validators, FormControl, FormArray, AbstractControl } from '@angular/forms';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/throttleTime';
 import 'rxjs/add/observable/fromEvent';
@@ -18,6 +19,10 @@ import { Opcao } from 'src/app/models/perguntas/opcao';
 import { PerguntaGradeOpcoes } from 'src/app/models/perguntas/pergunta-grade-opcoes';
 import { RespostaAnexo } from 'src/app/models/respostas/resposta-anexo';
 import { BaseComponent } from '../base/base.component';
+import { Resposta } from 'src/app/models/respostas/resposta';
+import { error } from 'util';
+import { Subscription } from 'rxjs';
+import { FormControlCreator } from './form-control-creator';
 
 @Component({
   exportAs: 'dynamicForm',
@@ -27,23 +32,37 @@ import { BaseComponent } from '../base/base.component';
   styles: []
 })
 
-export class DynamicFormComponent implements OnInit {
+export class DynamicFormComponent implements OnInit, OnDestroy {
   @Input() respostaFormulario: RespostaModeloFormulario;
   @Output() submit: EventEmitter<any> = new EventEmitter<any>();
 
   form: FormGroup;
   private components: BaseComponent[] = [];
+  private subscriptions: Subscription[] = [];
+  private formControlCreator: FormControlCreator;
 
   get value() {
     return this.form.value;
   }
-  constructor(private fb: FormBuilder) { }
 
-  ngOnInit() {
-    this.form = this.createControl();
+  get valid() {
+    return this.form.valid;
   }
 
-  componentCreate(event: any) {    
+  constructor(private fb: FormBuilder) {
+    this.formControlCreator = new FormControlCreator(fb, this.components);
+  }
+
+  ngOnInit() {
+    this.form = this.createForm();
+  }
+
+  ngOnDestroy() {
+    //Unsubscribe all control subscribers
+    this.subscriptions.forEach(x => x.unsubscribe());
+  }
+
+  componentCreate(event: any) {
     this.components.push(event);
   }
 
@@ -57,15 +76,19 @@ export class DynamicFormComponent implements OnInit {
     }
   }
 
-  createControl() {
+  createForm() {
     const group = this.fb.group({});
-
+    
     if (this.respostaFormulario != null) {
       this.respostaFormulario.respostas.forEach(resposta => {
-        let control = null;
-        // Habilita ou desabilita pergunta condicional
-        resposta.getSubjectVisible().subscribe((x: boolean) => {
-          if (control as FormControl != null) {
+        const tuple = this.formControlCreator.createControl(resposta);
+        const control = tuple.control;
+        //Push control subscriptions
+        tuple.subscriptions.forEach(x => this.subscriptions.push(x));
+
+        //Habilita ou desabilita pergunta condicional
+        const sub = resposta.getSubjectVisible().subscribe((x: boolean) => {
+          if (control as AbstractControl != null) {
             if (x === true) {
               control.enable();
             } else {
@@ -73,86 +96,15 @@ export class DynamicFormComponent implements OnInit {
             }
           }
         });
+
+        this.subscriptions.push(sub);
         resposta.getSubjectVisible().next(resposta.getVisible());
-
-        if (resposta.getPergunta().tipoPergunta === TipoPergunta.Texto) {
-          const rTexto = resposta as RespostaTexto;
-          control = this.fb.control(rTexto.valor,
-            this.bindValidations(resposta.getValidations() || []));
-          control.valueChanges.debounceTime(500).subscribe(x => { rTexto.setValor(x); });
-        } else if (resposta.getPergunta().tipoPergunta === TipoPergunta.EscolhaUnica) {
-          const rEscolhaUnica = resposta as RespostaUnicaOpcao;
-          control = this.fb.control(rEscolhaUnica.opcaoID,
-            this.bindValidations(resposta.getValidations() || []));
-          control.valueChanges.debounceTime(500).subscribe(x => { rEscolhaUnica.setOpcaoID(x); });
-        } else if (resposta.getPergunta().tipoPergunta === TipoPergunta.MultiplaEscolha) {
-          const rMultiplaEscolha = resposta as RespostaMultiplaOpcao;
-          const pMultipla = rMultiplaEscolha.getPergunta() as PerguntaMultiplaEscolha;
-
-          const controls = pMultipla.opcoes.map((x, i) => {
-            let selected = false;
-            if (rMultiplaEscolha.opcoes.findIndex(d => d === x.opcaoID) > -1) {
-              selected = true;
-            }
-            return this.fb.control(selected);
-          });
-
-          control = this.fb.array(controls,
-            this.bindValidations(resposta.getValidations() || []));
-          control.valueChanges.debounceTime(500).subscribe(x => {
-            rMultiplaEscolha.setOpcoes(x)
-          });
-
-        } else if (resposta.getPergunta().tipoPergunta === TipoPergunta.Numero) {
-          const rNumero = resposta as RespostaNumero;
-          control = this.fb.control(rNumero.valor,
-            this.bindValidations(resposta.getValidations() || []));
-          control.valueChanges.debounceTime(500).subscribe(x => { rNumero.setValor(x); });
-        } else if (resposta.getPergunta().tipoPergunta === TipoPergunta.Data) {
-          const rData = resposta as RespostaData;
-          control = this.fb.control(rData.valor,
-            this.bindValidations(resposta.getValidations() || []));
-          control.valueChanges.debounceTime(500).subscribe(x => { rData.setValor(x); });
-        } else if (resposta.getPergunta().tipoPergunta === TipoPergunta.Grade) {
-          const rGrade = resposta as RespostaGradeOpcoes;
-          const controls = rGrade.respostaLinhaPerguntaGrade.map(linha => {
-            const linhaControl = this.fb.control(linha.opcaoRespondidaID,
-              this.bindValidations(resposta.getValidations() || []));
-            linhaControl.valueChanges.debounceTime(500).subscribe(x => { console.log(x); rGrade.setRespostaGrade(linha); });
-            return linhaControl;
-          });
-          control = this.fb.array(controls);
-        } else if (resposta.getPergunta().tipoPergunta == TipoPergunta.Anexo) {
-          const rAnexo = resposta as RespostaAnexo;
-          control = this.fb.control(rAnexo.valor.name,
-            this.bindValidations(resposta.getValidations() || []));
-       
-          control.valueChanges.debounceTime(500)
-            .subscribe((x, y, z) => {
-              const c = this.components.find(x=>x.resposta.getPergunta().perguntaID === rAnexo.perguntaID) as FileUploadComponent;
-              rAnexo.setValor(c.file.nativeElement.files[0]);
-              console.log(c.file.nativeElement.files[0]);              
-            });
-        } else {
-          throw new Error('Não implementado');
-        }
-        
         group.addControl(resposta.getComponentName(), control);
+
       });
     }
 
     return group;
-  }
-
-  bindValidations(validations: any) {
-    if (validations.length > 0) {
-      const validList = [];
-      validations.forEach(valid => {
-        validList.push(valid.validator);
-      });
-      return Validators.compose(validList);
-    }
-    return null;
   }
 
   validateAllFormFields(formGroup: FormGroup) {

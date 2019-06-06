@@ -2,7 +2,7 @@ import { PerguntaCondicional } from "./pergunta-condicional";
 import { TipoOperacaoCondicional } from "../../enumeradores/tipo-operacao-condicional.enum";
 
 export class PerguntaCondicionalAnexo extends PerguntaCondicional {
-    valorAtivacao:number;
+    valorAtivacao: number;
 
     VerificarAtivacaoCondicional(obj: number): boolean {
         let condicao = false as boolean;

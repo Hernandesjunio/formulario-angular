@@ -5,8 +5,10 @@
     </h1>
   </div>
   <dynamic-form [respostaFormulario]="respostaFormulario" (submit)="submit($event)">
-  </dynamic-form>    
+  </dynamic-form>
   <div class="margin-top">
+    {{form.valid | json}}
     {{form.value | json}}
+
   </div>
 </div>

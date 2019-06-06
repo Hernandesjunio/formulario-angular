@@ -6,8 +6,7 @@ export class PerguntaMultiplaEscolha extends PerguntaComOpcoes {
      *
      */
     constructor() {
-        super();
-        this.opcoes = [];
+        super();        
         this.tipoPergunta = TipoPergunta.MultiplaEscolha;
     }
 

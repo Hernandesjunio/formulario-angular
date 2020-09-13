@@ -2,9 +2,9 @@ import { PerguntaAnexo } from './../../models/perguntas/pergunta-anexo';
 import { FileUploadComponent } from './../file-upload/file-upload.component';
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl, FormArray, AbstractControl } from '@angular/forms';
-import 'rxjs/add/operator/debounceTime';
-import 'rxjs/add/operator/throttleTime';
-import 'rxjs/add/observable/fromEvent';
+
+
+
 
 import { RespostaModeloFormulario } from 'src/app/models/resposta-modelo-formulario';
 import { TipoPergunta } from 'src/app/models/enumeradores/tipo-pergunta.enum';

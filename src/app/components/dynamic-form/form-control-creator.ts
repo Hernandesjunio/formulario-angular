@@ -1,9 +1,10 @@
+import { debounceTime } from 'rxjs/operators';
 import { PerguntaAnexo } from './../../models/perguntas/pergunta-anexo';
 import { FileUploadComponent } from './../file-upload/file-upload.component';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
-import 'rxjs/add/operator/debounceTime';
-import 'rxjs/add/operator/throttleTime';
-import 'rxjs/add/observable/fromEvent';
+
+
+
 import { TipoPergunta } from 'src/app/models/enumeradores/tipo-pergunta.enum';
 import { RespostaTexto } from 'src/app/models/respostas/resposta-texto';
 import { RespostaUnicaOpcao } from 'src/app/models/respostas/resposta-unica-opcao';
@@ -72,7 +73,7 @@ export class FormControlCreator {
         const subscriptions: Subscription[] = [];
         const rTexto = resposta as RespostaTexto;
         const control = this.fb.control(rTexto.valor, this.bindValidations(resposta.getValidations()));
-        const sub = control.valueChanges.debounceTime(500).subscribe(x => { rTexto.setValor(x); });
+        const sub = control.valueChanges.pipe(debounceTime(500)).subscribe(x => { rTexto.setValor(x); });
         subscriptions.push(sub);
 
         return { control: control, subscriptions: subscriptions };
@@ -82,7 +83,7 @@ export class FormControlCreator {
         const subscriptions: Subscription[] = [];
         const rEscolhaUnica = resposta as RespostaUnicaOpcao;
         const control = this.fb.control(rEscolhaUnica.opcaoID, this.bindValidations(resposta.getValidations() || []));
-        const sub = control.valueChanges.debounceTime(500).subscribe(x => { rEscolhaUnica.setOpcaoID(x); });
+        const sub = control.valueChanges.pipe(debounceTime(500)).subscribe(x => { rEscolhaUnica.setOpcaoID(x); });
         subscriptions.push(sub);
 
         return { control: control, subscriptions: subscriptions };
@@ -102,7 +103,7 @@ export class FormControlCreator {
         });
 
         const control = this.fb.array(controls, this.bindValidations(resposta.getValidations() || []));
-        const sub = control.valueChanges.debounceTime(500).subscribe(x => {
+        const sub = control.valueChanges.pipe(debounceTime(500)).subscribe(x => {
             rMultiplaEscolha.setOpcoes(x)
         });
 
@@ -114,7 +115,7 @@ export class FormControlCreator {
         const subscriptions: Subscription[] = [];
         const rNumero = resposta as RespostaNumero;
         const control = this.fb.control(rNumero.valor, this.bindValidations(resposta.getValidations() || []));
-        const sub = control.valueChanges.debounceTime(500).subscribe(x => { rNumero.setValor(x); });
+        const sub = control.valueChanges.pipe(debounceTime(500)).subscribe(x => { rNumero.setValor(x); });
         subscriptions.push(sub);
 
         return { control: control, subscriptions: subscriptions };
@@ -124,7 +125,7 @@ export class FormControlCreator {
         const subscriptions: Subscription[] = [];
         const rData = resposta as RespostaData;
         const control = this.fb.control(rData.valor, this.bindValidations(resposta.getValidations() || []));
-        const sub = control.valueChanges.debounceTime(500).subscribe(x => { rData.setValor(x); });
+        const sub = control.valueChanges.pipe(debounceTime(500)).subscribe(x => { rData.setValor(x); });
         subscriptions.push(sub);
 
         return { control: control, subscriptions: subscriptions };
@@ -135,7 +136,7 @@ export class FormControlCreator {
         const subscriptions: Subscription[] = [];
         const controls = rGrade.respostaLinhaPerguntaGrade.map(linha => {
             const linhaControl = this.fb.control(linha.opcaoRespondidaID, this.bindValidations(resposta.getValidations() || []));
-            const sub = linhaControl.valueChanges.debounceTime(500).subscribe(x => { rGrade.setRespostaGrade(linha); });
+            const sub = linhaControl.valueChanges.pipe(debounceTime(500)).subscribe(x => { rGrade.setRespostaGrade(linha); });
             subscriptions.push(sub);
             return linhaControl;
         });
@@ -149,7 +150,7 @@ export class FormControlCreator {
         const subscriptions: Subscription[] = [];
         const rAnexo = resposta as RespostaAnexo;
         const control = this.fb.control(rAnexo.valor.name, this.bindValidations(resposta.getValidations() || []));
-        const sub = control.valueChanges.debounceTime(20)
+        const sub = control.valueChanges.pipe(debounceTime(20))
             .subscribe(() => {
                 const component = this.components.find(x => x.resposta.getPergunta().perguntaID === rAnexo.perguntaID) as FileUploadComponent;
                 if (component.file.nativeElement.files.length > 0) {
@@ -159,7 +160,7 @@ export class FormControlCreator {
                     component.group.get(rAnexo.getComponentName()).updateValueAndValidity({ onlySelf: false, emitEvent: false });
                     if (file.size < pergunta.tamanhoMaximoBytes) {
                         component.onFilesAdded();
-                    }                    
+                    }
                 }
             });
 

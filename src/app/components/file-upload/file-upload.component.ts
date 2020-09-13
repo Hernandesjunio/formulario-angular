@@ -1,4 +1,3 @@
-import { ResponseContentType } from '@angular/http';
 import { Component, ViewChild, OnDestroy } from '@angular/core';
 import { BaseComponent } from '../base/base.component';
 import { Subject, Observable, forkJoin, Subscription } from 'rxjs';
@@ -10,7 +9,7 @@ import { HttpClient, HttpRequest, HttpEventType, HttpResponse, HttpHeaders } fro
   styleUrls: ['./file-upload.component.css']
 })
 export class FileUploadComponent extends BaseComponent implements OnDestroy {
-  @ViewChild("file") file;
+  @ViewChild("file", { static: false }) file;
   subscription: Subscription[] = [];
   progress: { [key: string]: { progress: Observable<number> } };
   canBeClosed: boolean = true;
@@ -159,7 +158,7 @@ export class FileUploadComponent extends BaseComponent implements OnDestroy {
 
       //       // pass the percentage into the progress-stream
       //       progress.next(percentDone);
-      //     } 
+      //     }
       //   } else if (event instanceof HttpResponse) {
 
       //     // Close the progress-stream if we get an answer form the API

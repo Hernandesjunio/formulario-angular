@@ -30,7 +30,7 @@ import { RespostaAnexo } from './models/respostas/resposta-anexo';
 export class AppComponent {
 
   constructor(fb: FormBuilder, public dialog: MatDialog) {
-    
+
     this.respostaFormulario.modeloFormulario = new ModeloFormulario();
     this.respostaFormulario.modeloFormulario.titulo = 'Modelo de Formulário';
 
@@ -74,9 +74,9 @@ export class AppComponent {
     pMultipla1.opcoes.push(opcao2);
 
     const pGrade = new PerguntaGradeOpcoes();
-    pGrade.perguntaID=4;
-    pGrade.titulo="Conhecimentos";
-    pGrade.descricao="Conhecimentos";
+    pGrade.perguntaID = 4;
+    pGrade.titulo = "Conhecimentos";
+    pGrade.descricao = "Conhecimentos";
 
     const op1Grade = new Opcao();
     op1Grade.opcaoID = 30;
@@ -95,30 +95,30 @@ export class AppComponent {
     pGrade.opcoes.push(op3Grade);
 
     const l1Grade = new LinhaGrade();
-    l1Grade.descricao="C#";
-    l1Grade.linhaID=1;
+    l1Grade.descricao = "C#";
+    l1Grade.linhaID = 1;
 
     pGrade.linhasGrade.push(l1Grade);
 
     const l2Grade = new LinhaGrade();
-    l2Grade.descricao="JAVA";
-    l2Grade.linhaID=2;
+    l2Grade.descricao = "JAVA";
+    l2Grade.linhaID = 2;
 
     pGrade.linhasGrade.push(l2Grade);
 
     const pAnexo = new PerguntaAnexo();
-    pAnexo.descricao="Anexo";
-    pAnexo.titulo="Anexo";
-    pAnexo.perguntaID=5;
+    pAnexo.descricao = "Anexo";
+    pAnexo.titulo = "Anexo";
+    pAnexo.perguntaID = 5;
     //pAnexo.tipoPergunta = TipoPergunta.Anexo;
     //pAnexo.tamanhoMaximoBytes = 1024;
-        
+
 
     this.respostaFormulario.modeloFormulario.perguntas.push(pTexto);
     this.respostaFormulario.modeloFormulario.perguntas.push(pTexto2);
     this.respostaFormulario.modeloFormulario.perguntas.push(pMultipla1);
     this.respostaFormulario.modeloFormulario.perguntas.push(pAnexo);
-    
+
     const r1 = new RespostaTexto(this.respostaFormulario, 1, 1);
     r1.valor = 'Meu Valor';
     this.respostaFormulario.respostas.push(r1);
@@ -130,27 +130,27 @@ export class AppComponent {
     const r3 = new RespostaMultiplaOpcao(this.respostaFormulario, 3, 3);
     r3.opcoes.push(21);
     this.respostaFormulario.respostas.push(r3);
-    
+
     const rlpg = new Array<RespostaLinhaPerguntaGrade>();
 
     const rlpg1 = new RespostaLinhaPerguntaGrade();
-    rlpg1.linhaPerguntaGradeID=1;
+    rlpg1.linhaPerguntaGradeID = 1;
 
     const rlpg2 = new RespostaLinhaPerguntaGrade();
-    rlpg2.linhaPerguntaGradeID=2;
+    rlpg2.linhaPerguntaGradeID = 2;
 
     rlpg.push(rlpg1);
     rlpg.push(rlpg2);
 
     this.respostaFormulario.modeloFormulario.perguntas.push(pGrade);
-    const r4 = new RespostaGradeOpcoes(this.respostaFormulario,4,4, rlpg);
-    r4.respostaLinhaPerguntaGrade[0].opcaoRespondidaID=30;
-    r4.respostaLinhaPerguntaGrade[1].opcaoRespondidaID=31
+    const r4 = new RespostaGradeOpcoes(this.respostaFormulario, 4, 4, rlpg);
+    r4.respostaLinhaPerguntaGrade[0].opcaoRespondidaID = 30;
+    r4.respostaLinhaPerguntaGrade[1].opcaoRespondidaID = 31
 
     this.respostaFormulario.respostas.push(r4);
 
-    const rAnexo = new RespostaAnexo(this.respostaFormulario,5,5);
-    rAnexo.anexoID=0;
+    const rAnexo = new RespostaAnexo(this.respostaFormulario, 5, 5);
+    rAnexo.anexoID = 0;
     this.respostaFormulario.respostas.push(rAnexo);
 
     // r1.getSubjectVisible().subscribe(x => {
@@ -162,7 +162,7 @@ export class AppComponent {
     // });
   }
 
-  @ViewChild(DynamicFormComponent) form: DynamicFormComponent;
+  @ViewChild(DynamicFormComponent, { static: false }) form: DynamicFormComponent;
   respostaFormulario: RespostaModeloFormulario = new RespostaModeloFormulario();
 
   submit(value: any) { }

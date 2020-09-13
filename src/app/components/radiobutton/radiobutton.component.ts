@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { PerguntaComOpcoes } from 'src/app/models/perguntas/pergunta-com-opcoes';
 import { BaseComponent } from '../base/base.component';
 
 @Component({
@@ -8,4 +9,7 @@ import { BaseComponent } from '../base/base.component';
 })
 export class RadiobuttonComponent extends BaseComponent {
 
+  getPergunta(): PerguntaComOpcoes {
+    return this.resposta.getPergunta() as PerguntaComOpcoes;
+  }
 }

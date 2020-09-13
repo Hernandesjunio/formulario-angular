@@ -17,8 +17,6 @@ import { BaseComponent } from './components/base/base.component';
 import { MultipleLineRadiobuttonComponent } from './components/multiple-line-radiobutton/multiple-line-radiobutton.component';
 import { FileUploadComponent } from './components/file-upload/file-upload.component';
 import { CommonModule } from '@angular/common';
-import { MatProgressBarModule, MatDialogModule } from '@angular/material';
-import { FormControlCreator } from './components/dynamic-form/form-control-creator';
 
 @NgModule({
   declarations: [
@@ -39,14 +37,15 @@ import { FormControlCreator } from './components/dynamic-form/form-control-creat
     FileUploadComponent
   ],
   imports: [
-    CommonModule, 
+    CommonModule,
     //MatProgressBarModule,
     //MatDialogModule,
     BrowserModule,
     //BrowserAnimationsModule,
     MaterialModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent],

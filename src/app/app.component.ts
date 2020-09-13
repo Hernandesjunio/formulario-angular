@@ -18,7 +18,6 @@ import { RespostaMultiplaOpcao } from './models/respostas/resposta-multipla-opca
 import { PerguntaCondicionalTexto } from './models/perguntas/condicional/pergunta-condicional-texto';
 import { PerguntaGradeOpcoes } from './models/perguntas/pergunta-grade-opcoes';
 import { RespostaLinhaPerguntaGrade } from './models/respostas/resposta-linha-pergunta-grade';
-import { MatDialog } from '@angular/material';
 import { PerguntaAnexo } from './models/perguntas/pergunta-anexo';
 import { RespostaAnexo } from './models/respostas/resposta-anexo';
 
@@ -29,7 +28,7 @@ import { RespostaAnexo } from './models/respostas/resposta-anexo';
 })
 export class AppComponent {
 
-  constructor(fb: FormBuilder, public dialog: MatDialog) {
+  constructor(fb: FormBuilder) {
 
     this.respostaFormulario.modeloFormulario = new ModeloFormulario();
     this.respostaFormulario.modeloFormulario.titulo = 'Modelo de Formulário';

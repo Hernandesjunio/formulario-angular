@@ -2,6 +2,8 @@ import { Component, ViewChild, OnDestroy } from '@angular/core';
 import { BaseComponent } from '../base/base.component';
 import { Subject, Observable, forkJoin, Subscription } from 'rxjs';
 import { HttpClient, HttpRequest, HttpEventType, HttpResponse, HttpHeaders } from '@angular/common/http';
+import { PerguntaAnexo } from 'src/app/models/perguntas/pergunta-anexo';
+import { RespostaAnexo } from 'src/app/models/respostas/resposta-anexo';
 
 @Component({
   selector: 'app-file-upload',
@@ -29,6 +31,14 @@ export class FileUploadComponent extends BaseComponent implements OnDestroy {
 
   ngOnDestroy(): void {
     this.subscription.forEach(x => x.unsubscribe());
+  }
+
+  getPergunta(): PerguntaAnexo {
+    return this.resposta.getPergunta() as PerguntaAnexo;
+  }
+
+  getResposta(): RespostaAnexo {
+    return this.resposta as RespostaAnexo;
   }
 
   addFiles(): void {

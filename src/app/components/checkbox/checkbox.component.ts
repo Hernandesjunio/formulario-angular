@@ -1,5 +1,7 @@
+import { RespostaMultiplaOpcao } from './../../models/respostas/resposta-multipla-opcao';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormArray } from '@angular/forms';
+import { PerguntaComOpcoes } from 'src/app/models/perguntas/pergunta-com-opcoes';
 import { Resposta } from 'src/app/models/respostas/resposta';
 import { BaseComponent } from '../base/base.component';
 
@@ -19,6 +21,14 @@ export class CheckboxComponent extends BaseComponent {
     });
 
     return selected.map(c => c[projection]);
+  }
+
+  getPergunta(): PerguntaComOpcoes {
+    return this.resposta.getPergunta() as PerguntaComOpcoes;
+  }
+
+  getResposta(): RespostaMultiplaOpcao {
+    return this.resposta as RespostaMultiplaOpcao;
   }
 
 }

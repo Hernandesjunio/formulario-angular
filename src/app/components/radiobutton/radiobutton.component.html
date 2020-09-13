@@ -1,6 +1,6 @@
 <div class="demo-full-width margin-top" [formGroup]="group">
   <label class="radio-label-padding">{{resposta.getComponentPlaceHolder()}}:</label>
   <mat-radio-group [formControlName]="resposta.getComponentName()">
-  <mat-radio-button *ngFor="let item of resposta.pergunta.opcoes" [value]="item.opcaoID">{{item.descricao}}</mat-radio-button>
+  <mat-radio-button *ngFor="let item of getPergunta().opcoes" [value]="item.opcaoID">{{item.descricao}}</mat-radio-button>
   </mat-radio-group>
   </div>

@@ -1,10 +1,10 @@
 import { Resposta } from "src/app/models/respostas/resposta";
 import { OnInit, Component } from "@angular/core";
-import { FormGroup } from "@angular/forms";
+import { FormControl, FormGroup } from "@angular/forms";
 
 @Component({
   selector: 'app-button',
-  template: ''  
+  template: ''
 })
 export class BaseComponent implements OnInit {
 
@@ -14,6 +14,11 @@ export class BaseComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+
+  }
+
+  getGroup(resposta: Resposta): FormGroup {
+    return (this.group.get(resposta.getComponentName()) as FormGroup);
   }
 
 }

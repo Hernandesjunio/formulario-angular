@@ -17,9 +17,9 @@
       Adicionar Arquivo
     </button>
     <br />
-    <span>Tamanho máximo:&nbsp;{{resposta.getPergunta().tamanhoMaximoBytes/1024/1024}}&nbsp;MB</span>
+    <span>Tamanho máximo:&nbsp;{{ getPergunta().tamanhoMaximoBytes/1024/1024}}&nbsp;MB</span>
     <br />
-    <span>Tamanho do arquivo:&nbsp;{{resposta.getValor().size/1014/1014}}&nbsp;MB</span>
+    <span>Tamanho do arquivo:&nbsp;{{getResposta().getValor().size/1014/1014}}&nbsp;MB</span>
   </div>
 
   <!-- This is the content of the dialog, containing a list of the files to upload -->
@@ -32,9 +32,9 @@
     </mat-list>
   </mat-dialog-content>
   <ng-container *ngFor="let validation of resposta.getValidations();" ngProjectAs="mat-error">
-    <mat-error *ngIf="group.get(resposta.getComponentName()).hasError(validation.name)">{{validation.message}}</mat-error>    
+    <mat-error *ngIf="group.get(resposta.getComponentName()).hasError(validation.name)">{{validation.message}}</mat-error>
   </ng-container>
-  
+
   <!-- This are the actions of the dialog, containing the primary and the cancel button-->
   <!-- <mat-dialog-actions class="actions">
     <button *ngIf="showCancelButton" mat-button mat-dialog-close>Cancel</button>

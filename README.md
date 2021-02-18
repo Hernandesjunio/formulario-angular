@@ -1,5 +1,7 @@
 # FormularioUi
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/f97c6ca39bc344efaac9148e63acd053)](https://app.codacy.com/manual/Hernandesjunio/formulario-angular?utm_source=github.com&utm_medium=referral&utm_content=Hernandesjunio/formulario-angular&utm_campaign=Badge_Grade_Dashboard)
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.2.4.
 
 ## Development server
